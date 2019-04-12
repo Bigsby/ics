@@ -30,7 +30,7 @@
 
         const configs = {
             canvas: {
-                ic_width: 80,
+                ic_width: 60,
                 background: "#E0E0E0",
                 margin_horizontal: 20,
                 margin_vertical: 5,
@@ -40,7 +40,9 @@
                 pin_vertical_margin: 5,
                 pin_text_margin_horizontal: 5,
                 pin_HIGH_bakcground: "#20F020",
-                pin_LOW_bakcground: "#F02020"
+                pin_LOW_bakcground: "#F02020",
+                pin_VCC_background: "#8FBC8F",
+                pin_GND_background: "#FFD700"
             }
         };
 
@@ -51,6 +53,17 @@
             VCC: "VCC"
         };
 
+        function getPinBackground(pin) {
+
+            if (pin.type === PIN_TYPES.VCC) {
+                return configs.canvas.pin_VCC_background;
+            } else if (pin.type === PIN_TYPES.GND) {
+                return configs.canvas.pin_GND_background;
+            } else {
+                return pin.state ? configs.canvas.pin_HIGH_bakcground : configs.canvas.pin_LOW_bakcground;
+            }
+        }
+
         function drawPin(ctx, pins, rowIndex, isRight, textY, nameHorizontalMargin, pinNumberCenter, x, y, canvasWidth) {
             const pin = pins[isRight ? pins.length - rowIndex - 1 : rowIndex];
             const pinNumber = isRight ? pins.length - rowIndex : rowIndex + 1;
@@ -60,7 +73,7 @@
                 configs.canvas.pin_height
             ];
 
-            ctx.fillStyle = pin.state || pin.type === PIN_TYPES.VCC ? configs.canvas.pin_HIGH_bakcground : configs.canvas.pin_LOW_bakcground;
+            ctx.fillStyle = getPinBackground(pin);
             ctx.fillRect(...pinPos);
             ctx.strokeRect(...pinPos);
 
@@ -157,76 +170,316 @@
 
         const container = document.getElementById("appContainer");
 
-        const pins = [
-            {
-                name: "A1",
-                type: PIN_TYPES.INPUT
-            },
-            {
-                name: "B1",
-                type: PIN_TYPES.INPUT
-            },
-            {
-                name: "Y1",
-                type: PIN_TYPES.OUTPUT
-            },
-            {
-                name: "A2",
-                type: PIN_TYPES.INPUT
-            },
-            {
-                name: "B2",
-                type: PIN_TYPES.INPUT
-            },
-            {
-                name: "Y2",
-                type: PIN_TYPES.OUTPUT
-            },
-            {
-                type: PIN_TYPES.GND
-            },
-            {
-                name: "Y3",
-                type: PIN_TYPES.OUTPUT
-            },
-            {
-                name: "A3",
-                type: PIN_TYPES.INPUT
-            },
-            {
-                name: "B3",
-                type: PIN_TYPES.INPUT
-            },
-            {
-                name: "Y4",
-                type: PIN_TYPES.OUTPUT
-            },
-            {
-                name: "A4",
-                type: PIN_TYPES.INPUT
-            },
-            {
-                name: "B4",
-                type: PIN_TYPES.INPUT
-            },
-            {
-                type: PIN_TYPES.VCC
-            }
-        ];
+        function ic74x00_NAND() {
+            this.pins = [
+                {
+                    name: "A1",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "B1",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "Y1",
+                    type: PIN_TYPES.OUTPUT
+                },
+                {
+                    name: "A2",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "B2",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "Y2",
+                    type: PIN_TYPES.OUTPUT
+                },
+                {
+                    type: PIN_TYPES.GND
+                },
+                {
+                    name: "Y3",
+                    type: PIN_TYPES.OUTPUT
+                },
+                {
+                    name: "A3",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "B3",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "Y4",
+                    type: PIN_TYPES.OUTPUT
+                },
+                {
+                    name: "A4",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "B4",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    type: PIN_TYPES.VCC
+                }
+            ];
 
-        function nand(a, b, y) {
-            y.state = !(a.state && b.state);
+            function nand(a, b, y) {
+                y.state = !(a.state && b.state);
+            }
+
+            function setStates(pins) {
+                nand(pins[0], pins[1], pins[2]);
+                nand(pins[3], pins[4], pins[5]);
+                nand(pins[8], pins[9], pins[7]);
+                nand(pins[11], pins[12], pins[10]);
+            };
+
+            setStates(this.pins);
+            this.id = "74x00";
+            this.name = "74x00 - NAND";
+            this.update = setStates;
+            this.datasheet = "http://www.ti.com/lit/ds/symlink/sn74ls00.pdf";
         }
 
-        function setStates(pins) {
-            nand(pins[0], pins[1], pins[2]);
-            nand(pins[3], pins[4], pins[5]);
-            nand(pins[8], pins[9], pins[7]);
-            nand(pins[11], pins[12], pins[10]);
-        };
+        function ic74x02_NOR() {
+            this.pins = [
+                {
+                    name: "Y1",
+                    type: PIN_TYPES.OUTPUT
+                },
+                {
+                    name: "A1",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "B1",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "Y2",
+                    type: PIN_TYPES.OUTPUT
+                },
+                {
+                    name: "A2",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "B2",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    type: PIN_TYPES.GND
+                },
+                {
+                    name: "A3",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "B3",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "Y3",
+                    type: PIN_TYPES.OUTPUT
+                },
+                {
+                    name: "A4",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "B4",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "Y4",
+                    type: PIN_TYPES.OUTPUT
+                },
+                {
+                    type: PIN_TYPES.VCC
+                }
+            ];
 
-        setStates(pins);
-        drawIC({ pins: pins, name: "74LS00 - NAND", update: setStates }, container);
+            function nor(a, b, y) {
+                y.state = !(a.state || b.state);
+            }
+
+            function setStates(pins) {
+                nor(pins[1], pins[2], pins[0]);
+                nor(pins[4], pins[5], pins[3]);
+                nor(pins[7], pins[8], pins[9]);
+                nor(pins[10], pins[11], pins[12]);
+            };
+
+            setStates(this.pins);
+            this.id = "74x02";
+            this.name = "74x02 - NOR";
+            this.update = setStates;
+            this.datasheet = "http://www.ti.com/lit/ds/symlink/sn74ls02.pdf";
+        }
+
+        function ic74x04_NOT() {
+            this.pins = [
+                {
+                    name: "A1",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "Y1",
+                    type: PIN_TYPES.OUTPUT
+                },
+                {
+                    name: "A2",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "Y2",
+                    type: PIN_TYPES.OUTPUT
+                },
+                {
+                    name: "A3",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "Y3",
+                    type: PIN_TYPES.OUTPUT
+                },
+                {
+                    type: PIN_TYPES.GND
+                },
+                {
+                    name: "Y4",
+                    type: PIN_TYPES.OUTPUT
+                },
+                {
+                    name: "A4",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "Y5",
+                    type: PIN_TYPES.OUTPUT
+                },
+                {
+                    name: "A5",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "Y6",
+                    type: PIN_TYPES.OUTPUT
+                },
+                {
+                    name: "A6",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    type: PIN_TYPES.VCC
+                }
+            ];
+
+            function setStates(pins) {
+                pins[1].state = !pins[0].state;
+                pins[3].state = !pins[2].state;
+                pins[5].state = !pins[4].state;
+                pins[7].state = !pins[8].state;
+                pins[9].state = !pins[10].state;
+                pins[11].state = !pins[12].state;
+            };
+
+            setStates(this.pins);
+            this.id = "74x04";
+            this.name = "74x04 - NOT";
+            this.update = setStates;
+            this.datasheet = "http://www.ti.com/lit/ds/symlink/sn74ls04.pdf";
+        }
+
+        function ic74x08_AND() {
+            this.pins = [
+                {
+                    name: "A1",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "B1",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "Y1",
+                    type: PIN_TYPES.OUTPUT
+                },
+                {
+                    name: "A2",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "B2",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "Y2",
+                    type: PIN_TYPES.OUTPUT
+                },
+                {
+                    type: PIN_TYPES.GND
+                },
+                {
+                    name: "Y3",
+                    type: PIN_TYPES.OUTPUT
+                },
+                {
+                    name: "A3",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "B3",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "Y4",
+                    type: PIN_TYPES.OUTPUT
+                },
+                {
+                    name: "A4",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    name: "B4",
+                    type: PIN_TYPES.INPUT
+                },
+                {
+                    type: PIN_TYPES.VCC
+                }
+            ];
+
+            function and(a, b, y) {
+                y.state = a.state && b.state;
+            }
+
+            function setStates(pins) {
+                and(pins[0], pins[1], pins[2]);
+                and(pins[3], pins[4], pins[5]);
+                and(pins[8], pins[9], pins[7]);
+                and(pins[11], pins[12], pins[10]);
+            };
+
+            setStates(this.pins);
+            this.id = "74x08";
+            this.update = setStates;
+            this.name = "74x08 - AND";
+            this.datasheet = "http://www.ti.com/lit/ds/symlink/sn74ls08.pdf";
+        }
+
+        const ics = [
+            new ic74x00_NAND(),
+            new ic74x02_NOR(),
+            new ic74x04_NOT(),
+            new ic74x08_AND()
+        ];
+        ics.forEach(ic => drawIC(ic, container));
+        //drawIC(new ic74x08_AND(), container);
     </script>
 </body>
 
