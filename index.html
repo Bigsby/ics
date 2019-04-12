@@ -17,14 +17,16 @@
             align-items: center;
             width: auto;
         }
+        div.header {
+            margin-top: 10px;
+        }
     </style>
 </head>
 
 <body>
     <div id="appContainer"></div>
     <script>
-        const STATES = {
-            LOW: false,
+        const STATES = {            LOW: false,
             HIGH: true
         };
 
@@ -131,9 +133,18 @@
                 console.log("Pin count not devidable by 2, " + JSON.stringify(pins));
                 return;
             }
+            const header = document.createElement("div");
+            header.className = "header";
             const title = document.createElement("span");
-            title.innerText = definition.name;
-            targetElement.appendChild(title);
+            title.innerText = definition.name + "   ";
+            header.appendChild(title);
+            const link = document.createElement("a");
+            link.href = definition.datasheet;
+            link.innerText = "DS";
+            link.target = "_blank";
+            header.appendChild(link);
+
+            targetElement.appendChild(header);
 
             const canvas = document.createElement("canvas");
             const pinTotalHeight = configs.canvas.pin_height + (2 * configs.canvas.pin_vertical_margin);
@@ -173,54 +184,54 @@
         function ic74x00_NAND() {
             this.pins = [
                 {
-                    name: "A1",
+                    name: "1A",
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "B1",
+                    name: "1B",
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "Y1",
+                    name: "1Y",
                     type: PIN_TYPES.OUTPUT
                 },
                 {
-                    name: "A2",
+                    name: "2A",
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "B2",
+                    name: "2B",
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "Y2",
+                    name: "2Y",
                     type: PIN_TYPES.OUTPUT
                 },
                 {
                     type: PIN_TYPES.GND
                 },
                 {
-                    name: "Y3",
+                    name: "3Y",
                     type: PIN_TYPES.OUTPUT
                 },
                 {
-                    name: "A3",
+                    name: "3A",
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "B3",
+                    name: "3B",
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "Y4",
+                    name: "4Y",
                     type: PIN_TYPES.OUTPUT
                 },
                 {
-                    name: "A4",
+                    name: "4A",
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "B4",
+                    name: "4B",
                     type: PIN_TYPES.INPUT
                 },
                 {
@@ -249,54 +260,54 @@
         function ic74x02_NOR() {
             this.pins = [
                 {
-                    name: "Y1",
+                    name: "1Y",
                     type: PIN_TYPES.OUTPUT
                 },
                 {
-                    name: "A1",
+                    name: "1A",
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "B1",
+                    name: "1B",
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "Y2",
+                    name: "2Y",
                     type: PIN_TYPES.OUTPUT
                 },
                 {
-                    name: "A2",
+                    name: "2A",
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "B2",
+                    name: "2B",
                     type: PIN_TYPES.INPUT
                 },
                 {
                     type: PIN_TYPES.GND
                 },
                 {
-                    name: "A3",
+                    name: "3A",
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "B3",
+                    name: "3B",
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "Y3",
+                    name: "3Y",
                     type: PIN_TYPES.OUTPUT
                 },
                 {
-                    name: "A4",
+                    name: "4A",
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "B4",
+                    name: "4B",
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "Y4",
+                    name: "4Y",
                     type: PIN_TYPES.OUTPUT
                 },
                 {
@@ -329,46 +340,46 @@
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "Y1",
+                    name: "1Y",
                     type: PIN_TYPES.OUTPUT
                 },
                 {
-                    name: "A2",
+                    name: "2A",
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "Y2",
+                    name: "2Y",
                     type: PIN_TYPES.OUTPUT
                 },
                 {
-                    name: "A3",
+                    name: "3A",
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "Y3",
+                    name: "3Y",
                     type: PIN_TYPES.OUTPUT
                 },
                 {
                     type: PIN_TYPES.GND
                 },
                 {
-                    name: "Y4",
+                    name: "4Y",
                     type: PIN_TYPES.OUTPUT
                 },
                 {
-                    name: "A4",
+                    name: "4A",
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "Y5",
+                    name: "5Y",
                     type: PIN_TYPES.OUTPUT
                 },
                 {
-                    name: "A5",
+                    name: "5A",
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "Y6",
+                    name: "6Y",
                     type: PIN_TYPES.OUTPUT
                 },
                 {
@@ -399,54 +410,54 @@
         function ic74x08_AND() {
             this.pins = [
                 {
-                    name: "A1",
+                    name: "1A",
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "B1",
+                    name: "1B",
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "Y1",
+                    name: "1Y",
                     type: PIN_TYPES.OUTPUT
                 },
                 {
-                    name: "A2",
+                    name: "2A",
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "B2",
+                    name: "2B",
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "Y2",
+                    name: "2Y",
                     type: PIN_TYPES.OUTPUT
                 },
                 {
                     type: PIN_TYPES.GND
                 },
                 {
-                    name: "Y3",
+                    name: "3Y",
                     type: PIN_TYPES.OUTPUT
                 },
                 {
-                    name: "A3",
+                    name: "3A",
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "B3",
+                    name: "3B",
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "Y4",
+                    name: "4Y",
                     type: PIN_TYPES.OUTPUT
                 },
                 {
-                    name: "A4",
+                    name: "4A",
                     type: PIN_TYPES.INPUT
                 },
                 {
-                    name: "B4",
+                    name: "4B",
                     type: PIN_TYPES.INPUT
                 },
                 {
