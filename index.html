@@ -44,7 +44,13 @@
                 pin_HIGH_bakcground: "#20F020",
                 pin_LOW_bakcground: "#F02020",
                 pin_VCC_background: "#8FBC8F",
-                pin_GND_background: "#FFD700"
+                pin_GND_background: "#FFD700",
+                pin_INPUT_lineWidth: 2,
+                pin_other_lineWidth: 1,
+                pin_power_dash: [2, 2],
+                pin_other_dash: [],
+                pin_INPUT_font: "bold 10px sans-serif",
+                pin_other_font: "10px sans-serif"
             }
         };
 
@@ -77,6 +83,8 @@
 
             ctx.fillStyle = getPinBackground(pin);
             ctx.fillRect(...pinPos);
+            ctx.lineWidth = pin.type === PIN_TYPES.INPUT ? configs.canvas.pin_INPUT_lineWidth : configs.canvas.pin_other_lineWidth;
+            ctx.setLineDash(pin.type === PIN_TYPES.VCC || pin.type === PIN_TYPES.GND ? configs.canvas.pin_power_dash : configs.canvas.pin_other_dash);
             ctx.strokeRect(...pinPos);
 
             ctx.fillStyle = "#000";
@@ -85,6 +93,7 @@
             ctx.fillText(pinNumber, isRight ? canvasWidth - pinNumberCenter : pinNumberCenter, textY);
 
             ctx.textAlign = isRight ? "end" : "start";
+            ctx.font = pin.type === PIN_TYPES.INPUT ? configs.canvas.pin_INPUT_font : configs.canvas.pin_other_font;
             ctx.fillText(pin.name || pin.type, isRight ? canvasWidth - nameHorizontalMargin : nameHorizontalMargin, textY);
             pin.pos = { 
                 x, 
