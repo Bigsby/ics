@@ -101,14 +101,19 @@ function drawIC(definition, targetElement) {
     
     const header = document.createElement("div");
     header.className = "header";
-    const title = document.createElement("span");
-    title.innerText = definition.id + " - " + definition.name + "   ";
-    header.appendChild(title);
+    const id = document.createElement("span");
+    id.className = "id";
+    id.innerText = definition.id + "   ";
+    header.appendChild(id);
     const link = document.createElement("a");
     link.href = definition.datasheet;
     link.innerText = "DS";
     link.target = "_blank";
     header.appendChild(link);
+    header.appendChild(document.createElement("br"));
+    const name = document.createElement("span");
+    name.innerText = definition.name;
+    header.appendChild(name);
     icContainer.appendChild(header);
 
     const canvas = document.createElement("canvas");
