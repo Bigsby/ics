@@ -19,6 +19,7 @@ export default {
         pin_power_dash: [2, 2],
         pin_other_dash: [],
         pin_INPUT_font: "bold 10px sans-serif",
-        pin_other_font: "10px sans-serif"
+        pin_other_font: "10px sans-serif",
+        pin_inverted_dash_offset: 8
     }
 };

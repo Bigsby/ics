@@ -32,10 +32,22 @@ function drawPin(ctx, pins, rowIndex, isRight, textY, nameHorizontalMargin, pinN
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText(pinNumber, isRight ? canvasWidth - pinNumberCenter : pinNumberCenter, textY);
-
+    
     ctx.textAlign = isRight ? "end" : "start";
     ctx.font = pin.type === PIN_TYPES.INPUT ? configs.canvas.pin_INPUT_font : configs.canvas.pin_other_font;
-    ctx.fillText(pin.name || pin.type, isRight ? canvasWidth - nameHorizontalMargin : nameHorizontalMargin, textY);
+    const pinName = pin.name || pin.type;
+    const textX = isRight ? canvasWidth - nameHorizontalMargin : nameHorizontalMargin;
+    ctx.fillText(pinName, textX, textY);
+    if (pin.inverted) {
+        const dashWidth = ctx.measureText(pinName).width;
+        const dashY = textY - configs.canvas.pin_inverted_dash_offset;
+        ctx.beginPath();
+        ctx.moveTo(textX, dashY);
+        ctx.lineTo(textX + dashWidth, dashY);
+        ctx.stroke();
+    }
+    
+
     pin.pos = {
         x,
         y,
