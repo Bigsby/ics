@@ -6,47 +6,23 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Integrated Circuits</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <!-- <link rel='stylesheet' type='text/css' media='screen' href='main.css'> -->
-    
+    <link rel='stylesheet' type='text/css' media='screen' href='./styles/main.css'>
+
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    
-    <style>
-        div#appContainer {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            width: auto;
-            flex-wrap: wrap;
-            justify-content: start;
-        }
-        
-        div.icContainer {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 15px;
-        }
-
-        div.header {
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        div.header .id {
-            font-weight: bold;
-        }
-    </style>
 </head>
 
 <body>
-    <div id="appContainer"></div>
+    <h1>Integrated Circuits</h1>
+    <div id="appContainer">
+        <ic-display v-for="ic in ics" :ic="ic"></ic-display>
+    </div>
     <script src='scripts/main.js' type="module"></script>
 </body>
 
 <!-- 
 https://gist.github.com/willurd/5720255
-python -m SimpleHTTPServer 8000
-python -m http.server 8000 
+python server.py
 -->
+
 </html>

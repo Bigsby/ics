@@ -1,0 +1,112 @@
+div#appContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: auto;
+    flex-wrap: wrap;
+    justify-content: start;
+}
+
+div.icContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 15px;
+}
+
+div.header {
+    margin-top: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+div.header .id {
+    font-weight: bold;
+}
+
+div.ic {
+    display: flex;
+    flex-direction: row;
+    font-family: monospace;
+}
+
+div.ic-box {
+    border: 1px solid black;
+    display: flex;
+    justify-content: space-around;
+    width: 60px;
+}
+
+div.pin-strip {
+    display: flex;
+    flex-direction: column;
+}
+
+div.pin {
+    position: relative;
+}
+
+div.pin div.pin-number {
+    border: 1px solid black;
+    width: 20px;
+    margin: 2px 0;
+    text-align: center;
+}
+
+div.pin div.pin-number.input {
+    border: 2px solid black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+div.pin div.pin-number.HIGH {
+    background: #20E020;
+}
+
+div.pin div.pin-number.LOW {
+    background: #F04040;
+}
+
+div.pin div.pin-number.GND {
+    background: #FFD700;
+    border: dashed;
+}
+
+div.pin div.pin-number.VCC {
+    background: #8FBC8F;
+    border: dashed;
+}
+
+div.pin div.pin-number.NC {
+    background: #FFFFFF;
+}
+
+div.pin div.pin-number.left {
+    border-right: 0;
+}
+
+div.pin div.pin-number.right {
+    border-left: 0;
+}
+
+div.pin .pin-name {
+    position: absolute;
+    top: 3px;
+}
+
+div.pin .pin-name.input {
+    font-weight: bold;
+}
+
+div.pin .pin-name.inverted {
+    border-top: 1px solid black;
+}
+
+div.pin .pin-name.left {
+    left: 27px;
+}
+
+div.pin .pin-name.right {
+    right: 27px;
+}

@@ -3,24 +3,28 @@ import { PIN_TYPES } from "./definitions.js";
 function parsePins(definitions) {
     const result = [];
 
-    definitions.split(',').forEach(definition => {
+    definitions.split(',').forEach((definition, index) => {
         const pin = definition.split('/');
+        const number = index + 1;
         if (pin.length === 1) {
             switch (pin[0]) {
                 case "N":
                     result.push({
+                        number: number,
                         name: "NC",
                         type: PIN_TYPES.NC
                     });
                     break;
                 case "G":
                     result.push({
+                        number: number,
                         name: "GND",
                         type: PIN_TYPES.GND
                     });
                     break;
                 case "V":
                     result.push({
+                        number: number,
                         name: "VCC",
                         type: PIN_TYPES.VCC
                     });
@@ -31,6 +35,7 @@ function parsePins(definitions) {
             const pinName = inverted ? pin[0].substring(1) : pin[0];
             result.push({
                 name: pinName,
+                number: index + 1,
                 type: pin[1] === "i" ? PIN_TYPES.INPUT : PIN_TYPES.OUTPUT,
                 inverted: inverted
             });
