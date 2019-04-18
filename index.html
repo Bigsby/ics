@@ -7,15 +7,26 @@
     <title>Integrated Circuits</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <!-- <link rel='stylesheet' type='text/css' media='screen' href='main.css'> -->
+    
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <script src='main.js'></script>
+    
     <style>
         div#appContainer {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             align-items: center;
             width: auto;
+            flex-wrap: wrap;
+            justify-content: start;
+
+        }
+        
+        div.icContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 15px;
         }
 
         div.header {
@@ -26,354 +37,12 @@
 
 <body>
     <div id="appContainer"></div>
-    <script>
-        const STATES = {
-            LOW: false,
-            HIGH: true
-        };
-
-        const configs = {
-            canvas: {
-                ic_width: 60,
-                background: "#E0E0E0",
-                margin_horizontal: 20,
-                margin_vertical: 5,
-                ic_background: "#FFFFFF",
-                pin_width: 20,
-                pin_height: 15,
-                pin_vertical_margin: 5,
-                pin_text_margin_horizontal: 5,
-                pin_HIGH_bakcground: "#20F020",
-                pin_LOW_bakcground: "#F02020",
-                pin_VCC_background: "#8FBC8F",
-                pin_GND_background: "#FFD700",
-                pin_NC_background: "#FFFFFF",
-                pin_INPUT_lineWidth: 2,
-                pin_other_lineWidth: 1,
-                pin_power_dash: [2, 2],
-                pin_other_dash: [],
-                pin_INPUT_font: "bold 10px sans-serif",
-                pin_other_font: "10px sans-serif"
-            }
-        };
-
-        const PIN_TYPES = {
-            INPUT: "input",
-            OUTPUT: "output",
-            GND: "GND",
-            VCC: "VCC",
-            NC: "NC"
-        };
-
-        function getPinBackground(pin) {
-            if (pin.type === PIN_TYPES.VCC) {
-                return configs.canvas.pin_VCC_background;
-            } else if (pin.type === PIN_TYPES.GND) {
-                return configs.canvas.pin_GND_background;
-            } else if (pin.type === PIN_TYPES.NC) {
-                return configs.canvas.pin_NC_background;
-            } else {
-                return pin.state ? configs.canvas.pin_HIGH_bakcground : configs.canvas.pin_LOW_bakcground;
-            }
-        }
-
-        function drawPin(ctx, pins, rowIndex, isRight, textY, nameHorizontalMargin, pinNumberCenter, x, y, canvasWidth) {
-            const pin = pins[isRight ? pins.length - rowIndex - 1 : rowIndex];
-            const pinNumber = isRight ? pins.length - rowIndex : rowIndex + 1;
-            const pinPos = [
-                x, y,
-                configs.canvas.pin_width,
-                configs.canvas.pin_height
-            ];
-
-            ctx.fillStyle = getPinBackground(pin);
-            ctx.fillRect(...pinPos);
-            ctx.lineWidth = pin.type === PIN_TYPES.INPUT ? configs.canvas.pin_INPUT_lineWidth : configs.canvas.pin_other_lineWidth;
-            ctx.setLineDash(pin.type === PIN_TYPES.VCC || pin.type === PIN_TYPES.GND ? configs.canvas.pin_power_dash : configs.canvas.pin_other_dash);
-            ctx.strokeRect(...pinPos);
-
-            ctx.fillStyle = "#000";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillText(pinNumber, isRight ? canvasWidth - pinNumberCenter : pinNumberCenter, textY);
-
-            ctx.textAlign = isRight ? "end" : "start";
-            ctx.font = pin.type === PIN_TYPES.INPUT ? configs.canvas.pin_INPUT_font : configs.canvas.pin_other_font;
-            ctx.fillText(pin.name || pin.type, isRight ? canvasWidth - nameHorizontalMargin : nameHorizontalMargin, textY);
-            pin.pos = {
-                x,
-                y,
-                h: configs.canvas.pin_width,
-                w: configs.canvas.pin_height
-            };
-        }
-
-        function drawICPins(pins, ctx, canvasWidth, canvasHeight, pinTotalHeight) {
-            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-            const horizontalMargin = configs.canvas.pin_width + configs.canvas.margin_horizontal;
-
-            ctx.fillStyle = configs.canvas.ic_background;
-            const icRect = [
-                horizontalMargin,
-                configs.canvas.margin_vertical,
-                canvasWidth - 2 * horizontalMargin,
-                canvasHeight - 2 * configs.canvas.margin_vertical
-            ];
-            ctx.fillRect(...icRect);
-            ctx.strokeRect(...icRect);
-
-            let pinVerticalStart = configs.canvas.pin_vertical_margin + configs.canvas.margin_vertical; //{ configs.canvas.margin_horizontal };
-            let nameHorizontalMargin = configs.canvas.margin_horizontal + configs.canvas.pin_width + configs.canvas.pin_text_margin_horizontal;
-            const pinNumberCenter = configs.canvas.margin_horizontal + configs.canvas.pin_width / 2;
-            for (let pinIndex = 0; pinIndex < pins.length / 2; pinIndex++) {
-                const textY = pinVerticalStart + configs.canvas.pin_height / 2;
-
-                drawPin(ctx, pins, pinIndex, false, textY, nameHorizontalMargin, pinNumberCenter,
-                    configs.canvas.margin_horizontal,
-                    pinVerticalStart, canvasWidth);
-
-
-                drawPin(ctx, pins, pinIndex, true, textY, nameHorizontalMargin, pinNumberCenter,
-                    canvasWidth - configs.canvas.margin_horizontal - configs.canvas.pin_width,
-                    pinVerticalStart, canvasWidth);
-
-                pinVerticalStart += pinTotalHeight;
-            }
-        }
-
-        function drawIC(definition, targetElement) {
-            const pins = definition.pins;
-            if (!pins || !pins.length || pins.length % 2) {
-                console.log("Pin count not devidable by 2, " + JSON.stringify(pins));
-                return;
-            }
-            const header = document.createElement("div");
-            header.className = "header";
-            const title = document.createElement("span");
-            title.innerText = definition.id + " - " + definition.name + "   ";
-            header.appendChild(title);
-            const link = document.createElement("a");
-            link.href = definition.datasheet;
-            link.innerText = "DS";
-            link.target = "_blank";
-            header.appendChild(link);
-
-            targetElement.appendChild(header);
-
-            const canvas = document.createElement("canvas");
-            const pinTotalHeight = configs.canvas.pin_height + (2 * configs.canvas.pin_vertical_margin);
-            const canvasHeight = (pins.length / 2) * pinTotalHeight + 2 * configs.canvas.margin_vertical;
-            const canvasWidth = configs.canvas.ic_width + 2 * (configs.canvas.margin_horizontal + configs.canvas.pin_width);
-            canvas.width = canvasWidth;
-            canvas.height = canvasHeight;
-            canvas.style.background = configs.canvas.background;
-            targetElement.appendChild(canvas);
-
-            const ctx = canvas.getContext("2d");
-
-            drawICPins(pins, ctx, canvasWidth, canvasHeight, pinTotalHeight);
-
-            const canvasLeft = canvas.offsetLeft;
-            const canvasTop = canvas.offsetTop;
-
-            canvas.onclick = function (event) {
-                var x = event.pageX - canvasLeft,
-                    y = event.pageY - canvasTop;
-
-                pins.forEach(function (pin) {
-                    if (pin.type !== PIN_TYPES.INPUT) {
-                        return;
-                    }
-                    if (y > pin.pos.y && y < pin.pos.y + pin.pos.h && x > pin.pos.x && x < pin.pos.x + pin.pos.w) {
-                        pin.state = !pin.state;
-                    }
-                });
-                definition.update();
-                drawICPins(definition.pins, ctx, canvasWidth, canvasHeight, pinTotalHeight);
-            };
-        }
-
-        const container = document.getElementById("appContainer");
-
-        function parsePins(definitions) {
-            const result = [];
-
-            definitions.split(',').forEach(definition => {
-                const pin = definition.split('/');
-                if (pin.length === 1) {
-                    switch (pin[0]) {
-                        case "N":
-                            result.push({
-                                name: "NC",
-                                type: PIN_TYPES.NC
-                            });
-                            break;
-                        case "G":
-                            result.push({
-                                name: "GND",
-                                type: PIN_TYPES.GND
-                            });
-                            break;
-                        case "V":
-                            result.push({
-                                name: "VCC",
-                                type: PIN_TYPES.VCC
-                            });
-                            break;
-                    }
-                } else if (pin.length === 2) {
-                    result.push({
-                        name: pin[0],
-                        type: pin[1] === "i" ? PIN_TYPES.INPUT : PIN_TYPES.OUTPUT
-                    });
-                }
-            });
-
-            return result;
-        }
-
-        function newIC(id, name, pinDefinitions, datasheet, update) {
-            const result = {
-                id,
-                name,
-                pins: parsePins(pinDefinitions),
-                pin(name) {
-                    return this.pins.find(pin => pin.name === name);
-                },
-                datasheet,
-                update
-            };
-            result.pins.forEach(pin => { if (pin.type === PIN_TYPES.INPUT) pin.state = false; });
-            result.update(result.pins);
-            return result;
-        }
-
-        function nand(y, ...inputs) {
-            let result = true;
-            inputs.forEach(input => result = result && input.state);
-            y.state = !(result);
-        }
-
-        function and(y, ...inputs) {
-            let result = true;
-            inputs.forEach(input => result = result && input.state);
-            y.state = result;
-        }
-
-        function nor(y, ...inputs) {
-            let result = false;
-            inputs.forEach(input => result = result || input.state);
-            y.state = !(result);
-        }
-
-        function ic74x00_4x2iNAND() {
-            return newIC("74x00", "4x2i NAND",
-                "1A/i,1B/i,1Y/o,2A/i,2B/i,2Y/o,G,3Y/o,3A/i,3B/i,4Y/o,4A/i,4B/i,V",
-                "http://www.ti.com/lit/ds/symlink/sn74ls00.pdf",
-                function () {
-                    for (let index = 1; index <= 4; index++) {
-                        nand(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"));
-                    }
-                }
-            );
-        }
-
-        function ic74x02_4x2iNOR() {
-            return newIC("74x02", "4x2i NOR",
-                "1Y/o,1A/i,1B/i,2Y/o,2A/i,2B/i,G,3A/i,3B/i,3Y/o,4A/i,4B/i,4Y/o,V",
-                "http://www.ti.com/lit/ds/symlink/sn74ls02.pdf",
-                function () {
-                    for (let index = 1; index <= 4; index++) {
-                        nor(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"));
-                    }
-                }
-            );
-        }
-
-        function ic74x04_6x1iNOT() {
-            return newIC("74x04", "6x1i NOT",
-                "1A/i,1Y/o,2A/i,2Y/o,3A/i,3Y/o,G,4Y/o,4A/i,5Y/o,5A/i,6Y/o,6A/i,V",
-                "http://www.ti.com/lit/ds/symlink/sn74ls04.pdf",
-                function () {
-                    for (let index = 1; index <= 6; index++) {
-                        this.pin(index + "Y").state = !this.pin(index + "A").state;
-                    }
-                }
-            );
-        }
-
-        function ic74x08_4x2iAND() {
-            return newIC("74x08", "4x2i AND",
-                "1A/i,1B/i,1Y/o,2A/i,2B/i,2Y/o,G,3Y/o,3A/i,3B/i,4Y/o,4A/i,4B/i,V",
-                "http://www.ti.com/lit/ds/symlink/sn74ls08.pdf",
-                function () {
-                    for (let index = 1; index <= 4; index++) {
-                        and(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"));
-                    }
-                }
-            );
-        }
-
-        function ic74x10_3x3iNAND() {
-            return newIC("74x10", "3x3i NAND",
-                "1A/i,1B/i,2A/i,2B/i,2C/i,2Y/o,G,3Y/o,3A/i,3B/i,3C/i,1Y/o,1C/i,V",
-                "http://www.ti.com/lit/ds/symlink/sn74ls10.pdf",
-                function () {
-                    for (let index = 1; index <= 3; index++) {
-                        nand(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"), this.pin(index + "C"));
-                    }
-                }
-            );
-        }
-
-        function ic74x11_3x3iAND() {
-            return newIC("74x11", "3x3i AND",
-                "1A/i,1B/i,2A/i,2B/i,2C/i,2Y/o,G,3Y/o,3A/i,3B/i,3C/i,1Y/o,1C/i,V",
-                "http://www.ti.com/lit/ds/symlink/sn74ls11.pdf",
-                function () {
-                    for (let index = 1; index <= 3; index++) {
-                        and(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"), this.pin(index + "C"));
-                    }
-                }
-            );
-        }
-
-        function ic74x17_6x1iBUF() {
-            return newIC("74x17", "6x Buffer",
-                "1A/i,1Y/o,2A/i,2Y/o,3A/i,3Y/o,G,4Y/o,4A/i,5Y/o,5A/i,6Y/o,6A/i,V",
-                "http://www.ti.com/lit/ds/symlink/sn7417.pdf",
-                function () {
-                    for (let index = 1; index <= 6; index++) {
-                        this.pin(index + "Y").state = this.pin(index + "A").state;
-                    }
-                }
-            );
-        }
-
-        function ic74x18_2x4iNAND() {
-            return newIC("74x18", "2x4i NAND",
-                "1A/i,1B/i,N,1C/i,1D/i,1Y/o,G,2Y/o,2A/i,2B/i,N,2C/i,2D/i,V",
-                "https://archive.org/stream/bitsavers_tidataBookVol2_45945352/1985_The_TTL_Data_Book_Vol_2#page/n149/mode/2up",
-                function () {
-                    for (let index = 1; index <= 2; index++) {
-                        nand(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"), this.pin(index + "C"), this.pin(index + "D"));
-                    }
-                }
-            );
-        }
-
-        const ics = [
-            new ic74x00_4x2iNAND(),
-            new ic74x02_4x2iNOR(),
-            new ic74x04_6x1iNOT(),
-            new ic74x08_4x2iAND(),
-            new ic74x10_3x3iNAND(),
-            new ic74x11_3x3iAND(),
-            new ic74x17_6x1iBUF(),
-            new ic74x18_2x4iNAND()
-        ];
-        ics.forEach(ic => drawIC(ic, container));
-    </script>
+    <script src='scripts/main.js' type="module"></script>
 </body>
 
+<!-- 
+https://gist.github.com/willurd/5720255
+python -m SimpleHTTPServer 8000
+python -m http.server 8000 
+-->
 </html>
