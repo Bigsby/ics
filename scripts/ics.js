@@ -54,6 +54,13 @@ function newIC(id, name, pinDefinitions, datasheet, update, aliases) {
         pin(name) {
             return this.pins.find(pin => pin.name === name);
         },
+        setStates(pins, states) {
+            if (pins.length !== states.length) return;
+
+            for (let index = 0; index < pins.length; index++) {
+                this.pin(pins[index]).state = states[index];
+            }
+        },
         datasheet,
         update
     };
@@ -62,31 +69,31 @@ function newIC(id, name, pinDefinitions, datasheet, update, aliases) {
     return result;
 }
 
-function nand(y, ...inputs) {
+function nandSet(y, ...inputs) {
     let result = true;
     inputs.forEach(input => result = result && input.state);
     y.state = !(result);
 }
 
-function and(y, ...inputs) {
+function andSet(y, ...inputs) {
     let result = true;
     inputs.forEach(input => result = result && input.state);
     y.state = result;
 }
 
-function nor(y, ...inputs) {
+function norSet(y, ...inputs) {
     let result = false;
     inputs.forEach(input => result = result || input.state);
     y.state = !(result);
 }
 
-function or(y, ...inputs) {
+function orSet(y, ...inputs) {
     let result = false;
     inputs.forEach(input => result = result || input.state);
     y.state = result;
 }
 
-function xor(y, a, b) {
+function xorSet(y, a, b) {
     y.state = (a.state || b.state) && !(a.state && b.state);
 }
 
@@ -103,7 +110,7 @@ ics.push(newIC("74x00", "4x2i NAND",
     "http://www.ti.com/lit/ds/symlink/sn74ls00.pdf",
     function () {
         for (let index = 1; index <= 4; index++) {
-            nand(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"));
+            nandSet(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"));
         }
     }
 ));
@@ -113,12 +120,12 @@ ics.push(newIC("74x02", "4x2i NOR",
     "http://www.ti.com/lit/ds/symlink/sn74ls02.pdf",
     function () {
         for (let index = 1; index <= 4; index++) {
-            nor(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"));
+            norSet(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"));
         }
     }
 ));
 
-ics.push(newIC("74x04", "6x1i NOT",
+ics.push(newIC("74x04", "6x1i INVERTER",
     "1A/i,1Y/o,2A/i,2Y/o,3A/i,3Y/o,G,4Y/o,4A/i,5Y/o,5A/i,6Y/o,6A/i,V",
     "http://www.ti.com/lit/ds/symlink/sn74ls04.pdf",
     function () {
@@ -133,7 +140,7 @@ ics.push(newIC("74x08", "4x2i AND",
     "http://www.ti.com/lit/ds/symlink/sn74ls08.pdf",
     function () {
         for (let index = 1; index <= 4; index++) {
-            and(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"));
+            andSet(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"));
         }
     }
 ));
@@ -143,7 +150,7 @@ ics.push(newIC("74x10", "3x3i NAND",
     "http://www.ti.com/lit/ds/symlink/sn74ls10.pdf",
     function () {
         for (let index = 1; index <= 3; index++) {
-            nand(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"), this.pin(index + "C"));
+            nandSet(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"), this.pin(index + "C"));
         }
     }
 ));
@@ -153,7 +160,7 @@ ics.push(newIC("74x11", "3x3i AND",
     "http://www.ti.com/lit/ds/symlink/sn74ls11.pdf",
     function () {
         for (let index = 1; index <= 3; index++) {
-            and(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"), this.pin(index + "C"));
+            andSet(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"), this.pin(index + "C"));
         }
     }
 ));
@@ -173,7 +180,7 @@ ics.push(newIC("74x18", "2x4i NAND",
     "https://archive.org/stream/bitsavers_tidataBookVol2_45945352/1985_The_TTL_Data_Book_Vol_2#page/n149/mode/2up",
     function () {
         for (let index = 1; index <= 2; index++) {
-            nand(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"), this.pin(index + "C"), this.pin(index + "D"));
+            nandSet(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"), this.pin(index + "C"), this.pin(index + "D"));
         }
     }
 ));
@@ -183,7 +190,7 @@ ics.push(newIC("74x21", "2x4i AND",
     "http://www.ti.com/lit/ds/symlink/sn74ls21.pdf",
     function () {
         for (let index = 1; index <= 2; index++) {
-            and(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"), this.pin(index + "C"), this.pin(index + "D"));
+            andSet(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"), this.pin(index + "C"), this.pin(index + "D"));
         }
     }
 ));
@@ -196,7 +203,7 @@ ics.push(newIC("74x25", "2x4i NOR with Strobe",
             if (!this.pin(index + "G").state) {
                 this.pin(index + "Y").state = true;
             } else {
-                nor(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"), this.pin(index + "C"), this.pin(index + "D"));
+                norSet(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"), this.pin(index + "C"), this.pin(index + "D"));
             }
         }
     }
@@ -207,7 +214,7 @@ ics.push(newIC("74x27", "3x3i NOR",
     "http://www.ti.com/lit/ds/symlink/sn74ls27.pdf",
     function () {
         for (let index = 1; index <= 3; index++) {
-            nor(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"), this.pin(index + "C"));
+            norSet(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"), this.pin(index + "C"));
         }
     }
 ));
@@ -216,7 +223,7 @@ ics.push(newIC("74x30", "1x8i NAND",
     "A/i,B/i,C/i,D/i,E/i,F/i,G,Y/o,N,N,G/i,H/i,N,V",
     "http://www.ti.com/lit/ds/symlink/sn74ls30.pdf",
     function () {
-        nand(this.pin("Y"), this.pin("A"), this.pin("B"), this.pin("D"), this.pin("E"), this.pin("F"), this.pin("G"), this.pin("H"));
+        nandSet(this.pin("Y"), this.pin("A"), this.pin("B"), this.pin("D"), this.pin("E"), this.pin("F"), this.pin("G"), this.pin("H"));
     }
 ));
 
@@ -225,7 +232,7 @@ ics.push(newIC("74x32", "4x2i OR",
     "http://www.ti.com/lit/ds/symlink/sn74ls32.pdf",
     function () {
         for (let index = 1; index <= 4; index++) {
-            or(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"));
+            orSet(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"));
         }
     }
 ));
@@ -235,7 +242,7 @@ ics.push(newIC("74x36", "4x2i NOR",
     "https://archive.org/stream/bitsavers_tidataBookogicDataBook_23574286/1984_High-speed_CMOS_Logic_Data_Book#page/n81/mode/2up",
     function () {
         for (let index = 1; index <= 4; index++) {
-            nor(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"));
+            norSet(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"));
         }
     }
 ));
@@ -295,13 +302,7 @@ ics.push(newIC("74x49", "BCD>7Seg Decoder",
     function () {
         const decimalValue = this.pin("BI").state ? 15 : binaryToDecimal(this.pin("A"), this.pin("B"), this.pin("C"), this.pin("D"));
         const outputs = _7SegDecoderData[decimalValue];
-        this.pin("a").state = outputs[0];
-        this.pin("b").state = outputs[1];
-        this.pin("c").state = outputs[2];
-        this.pin("d").state = outputs[3];
-        this.pin("e").state = outputs[4];
-        this.pin("f").state = outputs[5];
-        this.pin("g").state = outputs[6];
+        this.setStates(["a", "b", "c", "d", "e", "f", "g"], outputs);
     }
 ));
 
@@ -313,17 +314,59 @@ ics.push(newIC("74x48", "BCD>7Seg Decoder",
         if (!this.pin("BI").state) {
             decimalValue = !this.pin("LT").state ? 16 :  binaryToDecimal(this.pin("A"), this.pin("B"), this.pin("C"), this.pin("D"));
         }
-
         const outputs = _7SegDecoderData[decimalValue];
-        this.pin("a").state = outputs[0];
-        this.pin("b").state = outputs[1];
-        this.pin("c").state = outputs[2];
-        this.pin("d").state = outputs[3];
-        this.pin("e").state = outputs[4];
-        this.pin("f").state = outputs[5];
-        this.pin("g").state = outputs[6];
+        this.setStates(["a", "b", "c", "d", "e", "f", "g"], outputs);
     }
 ));
+
+ics.push(newIC("74x86", "4x2i XOR",
+    "1A/i,1B/i,1Y/o,2A/i,2B/i,2Y/o,G,3Y/o,3A/i,3B/i,4Y/o,4A/i,4B/i,V",
+    "http://www.ti.com/lit/ds/symlink/sn74ls86a.pdf",
+    function() {
+        for (let index = 1; index <= 4; index++) {
+            xorSet(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"));
+        }
+    }
+));
+
+ics.push(newIC("74x64", "4-2-3-2 AND-OR-INVERT",
+    "A/i,E/i,F/i,G/i,H/i,I/i,G,Y/o,J/i,K/i,B/i,C/i,D/i,V",
+    "http://www.ti.com/lit/ds/symlink/sn54s64.pdf",
+    function() {
+        const _A = this.pin("A").state && this.pin("B").state && this.pin("C").state && this.pin("D").state;
+        const _B = this.pin("E").state && this.pin("F").state;
+        const _C = this.pin("G").state && this.pin("H").state && this.pin("I").state;
+        const _D = this.pin("J").state && this.pin("K").state;
+        this.pin("Y").state = !(_A || _B || _C || _D);
+    }
+));
+
+
+// const _74x151Ydata = [
+//     [ true, false, false, false, false, false, false, false ], // 0
+//     [ false, true, false, false, false, false, false, false ], // 1
+//     [ false, false, true, false, false, false, false, false ], // 2
+//     [ false, false, false, true, false, false, false, false ], // 3
+//     [ false, false, false, false, true, false, false, false ], // 4
+//     [ false, false, false, false, false, true, false, false ], // 5
+//     [ false, false, false, false, false, false, true, false ], // 6
+//     [ false, false, false, false, false, false, false, true ], // 7
+//     [ false, false, false, false, false, false, false, false ] // all off - strobe
+// ];
+// ics.push(newIC("74x151", "8>1 Selector",
+//     "D3/o,D2/o,D1/o,D0/o,Y/i,W/i,-G/i,G,C/i,B/i,A/i,D7/o,D6/o,D5/o,D4/o,V",
+//     "http://www.ti.com/lit/ds/symlink/sn74ls151.pdf",
+//     function() {
+//         let decimalValue = 8;
+//         if (!this.pin("G").state) {
+//             decimalValue = binaryToDecimal(this.pin("A"), this.pin("B"), this.pin("C"));
+//         }
+
+
+//     }
+// ));
+
+
 
 ics.sort((a, b) => {
     if (a.id < b.id)

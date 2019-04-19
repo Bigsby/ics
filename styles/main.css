@@ -1,6 +1,8 @@
-html, body {
+html,
+body {
     font-family: sans-serif;
 }
+
 div#searchContainer {
     display: flex;
     justify-content: center;
@@ -25,6 +27,10 @@ div.legendItem {
 
 div.legendItem label.input {
     font-weight: bold;
+}
+
+div.legendItem label.inverted {
+    border-top: 1px solid black;
 }
 
 div.legendItem .pin-number {
@@ -85,6 +91,19 @@ div.pin-number {
     width: 20px;
     margin: 2px 0;
     text-align: center;
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
 }
 
 div.pin-number.input {
