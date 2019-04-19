@@ -102,9 +102,21 @@ new Vue({
     el: 'div#appContainer',
     data() {
         return {
-            ics: ics
+            ics: [],
+            search: ""
         };
     },
+    watch: {
+        search: function(newValue) {
+            if (newValue) {
+                this.ics = this.completeList.filter(ic => ic.id.toLowerCase().includes(newValue.toLowerCase()) || ic.name.toLowerCase().includes(newValue.toLowerCase()));
+            } else {
+                this.ics = this.completeList;
+            }
+        }
+    },
     created() {
+        this.completeList = ics;
+        this.ics = this.completeList;
     }
 });

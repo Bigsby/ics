@@ -15,7 +15,13 @@
 <body>
     <h1>Integrated Circuits</h1>
     <div id="appContainer">
-        <ic-display v-for="ic in ics" :ic="ic"></ic-display>
+        <div id="searchContainer">
+            <label for="search">Search</label>
+            <input id="search" v-model="search" />
+        </div>
+        <div id="icsContainer">
+            <ic-display v-for="ic in ics" :ic="ic"></ic-display>
+        </div>
     </div>
     <script src='scripts/main.js' type="module"></script>
 </body>

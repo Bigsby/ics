@@ -311,7 +311,7 @@ ics.push(newIC("74x48", "BCD>7Seg Decoder",
     function () {
         let decimalValue = 15;
         if (!this.pin("BI").state) {
-            decimalValue = !this.pin("LT") ? 16 :  binaryToDecimal(this.pin("A"), this.pin("B"), this.pin("C"), this.pin("D"));
+            decimalValue = !this.pin("LT").state ? 16 :  binaryToDecimal(this.pin("A"), this.pin("B"), this.pin("C"), this.pin("D"));
         }
 
         const outputs = _7SegDecoderData[decimalValue];

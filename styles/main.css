@@ -1,4 +1,4 @@
-div#appContainer {
+div#icsContainer {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -69,12 +69,12 @@ div.pin div.pin-number.LOW {
 
 div.pin div.pin-number.GND {
     background: #FFD700;
-    border: dashed;
+    border: 1px dashed black;
 }
 
 div.pin div.pin-number.VCC {
     background: #8FBC8F;
-    border: dashed;
+    border: 1px dashed black;
 }
 
 div.pin div.pin-number.NC {
