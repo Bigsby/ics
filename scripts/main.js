@@ -109,7 +109,8 @@ new Vue({
     watch: {
         search: function(newValue) {
             if (newValue) {
-                this.ics = this.completeList.filter(ic => ic.id.toLowerCase().includes(newValue.toLowerCase()) || ic.name.toLowerCase().includes(newValue.toLowerCase()));
+                const regEx = new RegExp(newValue, "i");
+                this.ics = this.completeList.filter(ic => regEx.test(ic.id) || regEx.test(ic.name));
             } else {
                 this.ics = this.completeList;
             }
