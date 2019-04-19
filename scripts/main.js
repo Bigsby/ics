@@ -79,7 +79,7 @@ Vue.component("ic-display", {
     template: `
         <div class="icContainer">
             <div class="header">
-                <span class="id">{{ic.id}}  <a :href="ic.datasheet">DS</a></span>
+                <span class="id">{{ic.id}}  <a :href="ic.datasheet" target="_blank">DS</a></span>
                 <span>{{ic.name}}</span>
             </div>
             <ic :pins="ic.pins" @pinClicked="update($event, ic)"></ic>

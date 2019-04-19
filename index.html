@@ -19,6 +19,36 @@
             <label for="search">Search</label>
             <input id="search" v-model="search" />
         </div>
+        <div id="legendContainer">
+            <div class="legendItem">
+                <div class="pin-number NC">x</div>
+                <label>Not Connected</label>
+            </div>
+            <div class="legendItem">
+                <div class="pin-number GND">x</div>
+                <label>Ground</label>
+            </div>
+            <div class="legendItem">
+                <div class="pin-number VCC">x</div>
+                <label>VCC</label>
+            </div>
+            <div class="legendItem">
+                <div class="pin-number input HIGH">x</div>
+                <label class="input">High Input</label>
+            </div>
+            <div class="legendItem">
+                <div class="pin-number input LOW">x</div>
+                <label class="input">Low Input</label>
+            </div>
+            <div class="legendItem">
+                <div class="pin-number output HIGH">x</div>
+                <label>High Outpu</label>
+            </div>
+            <div class="legendItem">
+                <div class="pin-number output LOW">x</div>
+                <label>Low Output</label>
+            </div>
+        </div>
         <div id="icsContainer">
             <ic-display v-for="ic in ics" :ic="ic"></ic-display>
         </div>

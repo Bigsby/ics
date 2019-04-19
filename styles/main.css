@@ -1,3 +1,33 @@
+div#searchContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+div#searchContainer input {
+    margin: 10px;
+}
+
+div#legendContainer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+div.legendItem {
+    display: flex;
+    align-items: center;
+}
+
+div.legendItem label.input {
+    font-weight: bold;
+}
+
+div.legendItem .pin-number {
+    margin: 3px;
+}
+
 div#icsContainer {
     display: flex;
     flex-direction: row;
@@ -47,45 +77,49 @@ div.pin {
     position: relative;
 }
 
-div.pin div.pin-number {
+div.pin-number {
     border: 1px solid black;
     width: 20px;
     margin: 2px 0;
     text-align: center;
 }
 
-div.pin div.pin-number.input {
+div.pin-number.input {
     font-weight: bold;
     cursor: pointer;
 }
 
-div.pin div.pin-number.HIGH {
-    background: #20E020;
+div.pin-number.output {
+    color: lightgrey;
 }
 
-div.pin div.pin-number.LOW {
+div.pin-number.HIGH {
+    background: green;
+}
+
+div.pin-number.LOW {
     background: #F04040;
 }
 
-div.pin div.pin-number.GND {
+div.pin-number.GND {
     background: #FFD700;
     border: 1px dashed black;
 }
 
-div.pin div.pin-number.VCC {
+div.pin-number.VCC {
     background: #8FBC8F;
     border: 1px dashed black;
 }
 
-div.pin div.pin-number.NC {
+div.pin-number.NC {
     background: #FFFFFF;
 }
 
-div.pin div.pin-number.left {
+div.pin-number.left {
     border-right: 0;
 }
 
-div.pin div.pin-number.right {
+div.pin-number.right {
     border-left: 0;
 }
 
