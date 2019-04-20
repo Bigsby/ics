@@ -341,6 +341,32 @@ ics.push(newIC("74x64", "4-2-3-2 AND-OR-INVERT",
     }
 ));
 
+ics.push(newIC("74x541", "8x Buffer 3-State",
+    "-G1/i,A1/i,A2/i,A3/i,A4/i,A5/i,A6/i,A7/i,A8/i,G,Y8/o,Y7/o,Y6/o,Y5/o,Y4/o,Y3/o,Y2/o,Y1/o,-G2/i,V",
+    "http://www.ti.com/lit/ds/symlink/sn54ls541.pdf",
+    function() {
+        const enabled = !(this.pin("G1").state || this.pin("G2").state);
+        for (let index = 1; index <= 8; index++) {
+            this.pin("Y" + index).state = enabled && this.pin("A" + index).state;
+        }
+    }
+));
+
+const _74x373state = [ false, false, false, false, false, false, false, false ];
+ics.push(newIC("74x373", "8xD-Flip-Flop",
+    "-OC/i,1Q/o,1D/i,2D/i,2Q/o,3Q/o,3D/i,4D/i,4Q/o,G,C/i,5Q/o,5D/i,6D/i,6Q/o,7Q/o,7D/i,8D/i,8Q/o,V",
+    "http://www.ti.com/lit/ds/symlink/sn54ls373.pdf",
+    function() {
+        const enabled = !this.pin("OC").state;
+        if (this.pin("C").state) {
+            for (let index = 1; index <= 8; index++) {
+                _74x373state[index - 1] = this.pin(index + "D").state;
+            }
+        }
+
+        this.setStates(_74x373state.map((_, index) => (index + 1) + "Q"), _74x373state.map(value => value && enabled));
+    }
+));
 
 // const _74x151Ydata = [
 //     [ true, false, false, false, false, false, false, false ], // 0
