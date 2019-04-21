@@ -368,6 +368,34 @@ ics.push(newIC("74x373", "8xD-Flip-Flop",
     }
 ));
 
+const _62256state = [ ];
+const _62256outputNames = [...Array(8).keys()].map(index => "IO" + index);
+let _62256outputs;
+const _62256addresses = [...Array(15).keys()].map(index => "A" + index);
+// ics.push("62256", "32Kx8 Statis RAM",
+//     "A14/i,A12/i,A7/i,A6/i,A5/i,A4/i,A3/i,A2/i,A1/i,A0/i,IO0/o,IO1/o,IO2/o,G,IO3/o,IO4/o,IO5/o,IO6/o,IO7/o,-CS/i,A10/i,-OE/i,A11/i,A9/i,A8/i,A13/i,-WE/i,V",
+//     "http://pdf.datasheetcatalog.com/datasheets/166/177036_DS.pdf",
+//     function(changedPin) {
+//         if (!_62256outputs) {
+//             _62256outputs = _62256outputNames.map(pinName => this.pin(pinName));
+//         }
+//         const outputs = [ false, false, false, false, false, false, false, false ];
+//         if (!this.pin("CS").state || (this.pin("OE").state && this.pin("WE").state))  {
+//             _62256outputs.forEach(pin => pin.type = PIN_TYPES.OUTPUT);
+//             this.setStates(_62256outputs, outputs);
+//         } else {
+//             const address = binaryToDecimal(_62256addresses.map(name => this.pin(name)));
+//             if (!this.pin("WE").state) {
+//                 _62256outputs.forEach(pin => pin.type = PIN_TYPES.INPUT);
+//                 _62256state[address] = _62256outputs.map(pin => pin.state);
+//             } else if (!this.pin("OE").state) {
+//                 _62256outputs.forEach(pinName => this.pin(pinName).type = PIN_TYPES.OUTPUT);
+
+//             }
+//         }
+//     }
+// );
+
 // const _74x151Ydata = [
 //     [ true, false, false, false, false, false, false, false ], // 0
 //     [ false, true, false, false, false, false, false, false ], // 1

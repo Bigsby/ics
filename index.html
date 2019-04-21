@@ -7,9 +7,7 @@
     <title>Integrated Circuits</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='./styles/main.css'>
-
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -55,9 +53,44 @@
             </div>
         </div>
         <div id="icsContainer">
-            <ic-display v-for="ic in ics" :ic="ic"></ic-display>
+            <ic-display v-for="ic in ics" :ic="ic" :key="ic.id"></ic-display>
         </div>
     </div>
+    <script type="text/template" id="pin-template">
+        <div class="pin">
+            <div :class="['pin-number', side, pin.type, pin.state ? 'HIGH' : 'LOW']" @click="clicked">{{pin.number}}</div>
+            <div :class="['pin-name', side, pin.type, {inverted: pin.inverted}]"><span>{{pin.name}}<span></span></div>
+        </div>
+    </script>
+    <script type="text/template" id="pin-strip-template">
+        <div class="pin-strip">
+            <pin v-for="pin in pins" :pin="pin" @clicked="pinClicked($event)" :side="side"></pin>
+        </div>
+    </script>
+    <script type="text/template" id="pin-names-template">
+        <div class="pin-names">
+            <span :class="[{inverted: pin.inverted}, side]" v-for="pin in pins">{{pin.name}}</span>
+        </div>
+    </script>
+    <script type="text/template" id="ic-package-template">
+        <div class="ic-box"></div>
+    </script>
+    <script type="text/template" id="ic-template">
+        <div class="ic">
+            <pin-strip @pinClicked="pinClicked($event)" :pins="leftPins" side="left"></pin-strip>
+            <ic-package :leftPins="leftPins" :rightPins="rightPins"></ic-package>
+            <pin-strip @pinClicked="pinClicked($event)" :pins="rightPins" side="right"></pin-strip>
+        </div>
+    </script>
+    <script type="text/template" id="ic-display-template">
+        <div class="icContainer">
+            <div class="header">
+                <span class="id">{{ic.id}}  <a :href="ic.datasheet" target="_blank">DS</a></span>
+                <span>{{ic.name}}</span>
+            </div>
+            <ic :pins="ic.pins" @pinClicked="update($event, ic)"></ic>
+        </div>
+    </script>
     <script src='scripts/main.js' type="module"></script>
 </body>
 
