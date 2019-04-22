@@ -1,4 +1,4 @@
-import ics from "./ics.js";
+import ics from "./ics/ics.js";
 
 Vue.component("pin", {
     template: document.getElementById("pin-template"),
