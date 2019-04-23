@@ -87,6 +87,7 @@ div.pin {
 }
 
 div.pin-number {
+    position: relative;
     border: 1px solid black;
     width: 20px;
     margin: 2px 0;
@@ -107,13 +108,13 @@ div.pin-number {
 }
 
 div.pin-number.input {
-    font-weight: bold;
+    /* font-weight: bold; */
     cursor: pointer;
 }
 
-div.pin-number.output {
+/* div.pin-number.output {
     color: lightgrey;
-}
+} */
 
 div.pin-number.HIGH {
     background: green;
@@ -145,14 +146,56 @@ div.pin-number.right {
     border-left: 0;
 }
 
+div.io {
+    position: absolute;
+    top: 0;
+}
+
+div.io.left {    
+    right: 100%;
+    border-bottom: .6em solid transparent;
+    border-top: .6em solid transparent;
+}
+
+div.io.left.input {
+    border-left: .8em solid black;
+    border-right: 0;
+}
+
+div.io.left.output {
+    border-left: 0;
+    border-right: .8em solid black;
+}
+
+div.io.input_output {
+    border-left: .4em solid black;
+    border-right: .4em solid black;
+}
+
+div.io.right {
+    left: 100%;
+    border-bottom: .6em solid transparent;
+    border-top: .6em solid transparent;
+}
+
+div.io.right.input {
+    border-left: 0;
+    border-right: .8em solid black;
+}
+
+div.io.right.output {
+    border-left: .8em solid black;
+    border-right: 0;
+}
+
 div.pin .pin-name {
     position: absolute;
     top: 3px;
 }
 
-div.pin .pin-name.input {
+/* div.pin .pin-name.input {
     font-weight: bold;
-}
+} */
 
 div.pin .pin-name.inverted {
     border-top: 1px solid black;
