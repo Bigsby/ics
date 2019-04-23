@@ -108,13 +108,8 @@ div.pin-number {
 }
 
 div.pin-number.input {
-    /* font-weight: bold; */
     cursor: pointer;
 }
-
-/* div.pin-number.output {
-    color: lightgrey;
-} */
 
 div.pin-number.HIGH {
     background: green;
@@ -192,10 +187,6 @@ div.pin .pin-name {
     position: absolute;
     top: 3px;
 }
-
-/* div.pin .pin-name.input {
-    font-weight: bold;
-} */
 
 div.pin .pin-name.inverted {
     border-top: 1px solid black;
