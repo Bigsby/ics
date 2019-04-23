@@ -1,5 +1,7 @@
 import { newIC, nandSet, andSet, norSet, orSet, xorSet } from "./helpers.js";
 
+const ics = [];
+
 ics.push(newIC("74x00", "4x2i NAND",
     "1A/i,1B/i,1Y/o,2A/i,2B/i,2Y/o,G,3Y/o,3A/i,3B/i,4Y/o,4A/i,4B/i,V",
     "http://www.ti.com/lit/ds/symlink/sn74ls00.pdf",
@@ -153,3 +155,5 @@ ics.push(newIC("74x64", "4-2-3-2 AND-OR-INVERT",
         this.pin("Y").state = !(_A || _B || _C || _D);
     }
 ));
+
+export default ics;

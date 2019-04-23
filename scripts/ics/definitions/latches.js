@@ -1,3 +1,7 @@
+import { newIC } from "./helpers.js";
+
+const ics = [];
+
 const _74x373state = [ false, false, false, false, false, false, false, false ];
 ics.push(newIC("74x373", "8xD-Flip-Flop",
     "-OC/i,1Q/o,1D/i,2D/i,2Q/o,3Q/o,3D/i,4D/i,4Q/o,G,C/i,5Q/o,5D/i,6D/i,6Q/o,7Q/o,7D/i,8D/i,8Q/o,V",
@@ -41,3 +45,5 @@ const _62256addresses = [...Array(15).keys()].map(index => "A" + index);
 //         }
 //     }
 // );
+
+export default ics;

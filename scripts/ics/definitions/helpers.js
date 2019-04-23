@@ -109,3 +109,12 @@ export function binaryToDecimal(...inputs) {
     inputs.forEach((pin, index) => result += Math.pow(2, index) * (pin.state ? 1 : 0));
     return result;
 }
+
+export function decimalToBinary(value, bitCount) {
+    const result = [];
+    for (let bit = 0; bit < bitCount; bit++) {
+        result.unshift(value & 1 === 1);
+        value = value >> 1;
+    }
+    return result;
+}

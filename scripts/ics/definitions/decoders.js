@@ -1,3 +1,7 @@
+import { newIC, binaryToDecimal } from "./helpers.js";
+
+const ics = [];
+
 const _74x42data = [
     [false, true, true, true, true, true, true, true, true, true],
     [true, false, true, true, true, true, true, true, true, true],
@@ -69,3 +73,5 @@ ics.push(newIC("74x48", "BCD>7Seg Decoder",
         this.setStates(["a", "b", "c", "d", "e", "f", "g"], outputs);
     }
 ));
+
+export default ics;

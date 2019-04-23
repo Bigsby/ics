@@ -1,3 +1,4 @@
+const ics = [];
 
 // const _74x151Ydata = [
 //     [ true, false, false, false, false, false, false, false ], // 0
@@ -23,3 +24,4 @@
 //     }
 // ));
 
+export default ics;
