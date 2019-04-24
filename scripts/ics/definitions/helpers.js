@@ -52,16 +52,22 @@ function parsePins(definitions) {
     return result;
 }
 
-export function newIC(id, name, pinDefinitions, datasheet, update, aliases) {
+export function newIC(id, name, pinDefinitions, datasheet, update, optionals) {
     const result = {
         id,
         name,
-        aliases,
         pins: parsePins(pinDefinitions),
         pin(name) {
             return this.pins.find(pin => pin.name === name);
         },
         setStates(pins, states) {
+            if (pins.length !== states.length) return;
+
+            for (let index = 0; index < pins.length; index++) {
+                pins[index].state = states[index];
+            }
+        },
+        setStatesByName(pins, states) {
             if (pins.length !== states.length) return;
 
             for (let index = 0; index < pins.length; index++) {
@@ -71,6 +77,10 @@ export function newIC(id, name, pinDefinitions, datasheet, update, aliases) {
         datasheet,
         update
     };
+    Object.assign(result, optionals);
+    if (typeof result.initialize === "function") {
+        result.initialize();
+    } 
     result.pins.forEach(pin => { if (pin.type === PIN_TYPES.INPUT) pin.state = false; });
     result.update(result.pins);
     return result;

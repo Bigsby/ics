@@ -25,9 +25,14 @@ ics.push(newIC("74x42", "BCD>Decimal Decoder",
     "-0/o,-1/o,-2/o,-3/o,-4/o,-5/o,-6/o,G,-7/o,-8/o,-9/o,D/i,C/i,B/i,A/i,V",
     "http://www.ti.com/lit/ds/symlink/sn74ls32.pdf",
     function () {
-        const decimalValue = binaryToDecimal(this.pin("A"), this.pin("B"), this.pin("C"), this.pin("D"));
+        const decimalValue = binaryToDecimal(...this.BCDpins);
         const outputs = _74x42data[decimalValue];
         outputs.forEach((value, index) => this.pin(index.toString()).state = value);
+    },
+    {
+        initialize() {
+            this.BCDpins = [ "A", "B", "C", "D" ].map(name => this.pin(name));
+        }
     }
 ));
 
@@ -57,7 +62,12 @@ ics.push(newIC("74x49", "BCD>7Seg Decoder",
     function () {
         const decimalValue = this.pin("BI").state ? 15 : binaryToDecimal(this.pin("A"), this.pin("B"), this.pin("C"), this.pin("D"));
         const outputs = _7SegDecoderData[decimalValue];
-        this.setStates(["a", "b", "c", "d", "e", "f", "g"], outputs);
+        this.setStates(this.segmentPins, outputs);
+    },
+    {
+        initialize() {
+            this.segmentPins = ["a", "b", "c", "d", "e", "f", "g"].map(name => this.pin(name));
+        }
     }
 ));
 
@@ -70,7 +80,12 @@ ics.push(newIC("74x48", "BCD>7Seg Decoder",
             decimalValue = !this.pin("LT").state ? 16 :  binaryToDecimal(this.pin("A"), this.pin("B"), this.pin("C"), this.pin("D"));
         }
         const outputs = _7SegDecoderData[decimalValue];
-        this.setStates(["a", "b", "c", "d", "e", "f", "g"], outputs);
+        this.setStates(this.segmentPins, outputs);
+    },
+    {
+        initialize() {
+            this.segmentPins = ["a", "b", "c", "d", "e", "f", "g"].map(name => this.pin(name));
+        }
     }
 ));
 

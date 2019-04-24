@@ -2,19 +2,24 @@ import { newIC } from "./helpers.js";
 
 const ics = [];
 
-const _74x373state = [ false, false, false, false, false, false, false, false ];
 ics.push(newIC("74x373", "8xD-Flip-Flop",
     "-OC/i,1Q/o,1D/i,2D/i,2Q/o,3Q/o,3D/i,4D/i,4Q/o,G,C/i,5Q/o,5D/i,6D/i,6Q/o,7Q/o,7D/i,8D/i,8Q/o,V",
     "http://www.ti.com/lit/ds/symlink/sn54ls373.pdf",
     function() {
         const enabled = !this.pin("OC").state;
         if (this.pin("C").state) {
-            for (let index = 1; index <= 8; index++) {
-                _74x373state[index - 1] = this.pin(index + "D").state;
-            }
+            this.Ds.map((pin, index) => this.internalState[index] = pin.state);
         }
 
-        this.setStates(_74x373state.map((_, index) => (index + 1) + "Q"), _74x373state.map(value => value && enabled));
+        this.setStates(this.Qs, this.internalState.map(value => value && enabled));
+    },
+    {
+        initialize() {
+            this.internalState = [ false, false, false, false, false, false, false, false ];
+            const indexes = [...Array(8).keys()].map(index => index + 1);
+            this.Qs = indexes.map(index => this.pin(index + "Q"));
+            this.Ds = indexes.map(index => this.pin(index + "D"));
+        }
     }
 ));
 

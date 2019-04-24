@@ -1,4 +1,4 @@
-import { newIC, nandSet, andSet, norSet, orSet, xorSet } from "./helpers.js";
+import { newIC, nandSet, andSet, norSet, orSet, xorSet, binaryToDecimal, decimalToBinary } from "./helpers.js";
 
 const ics = [];
 
@@ -137,7 +137,7 @@ ics.push(newIC("74x36", "4x2i NOR",
 ics.push(newIC("74x86", "4x2i XOR",
     "1A/i,1B/i,1Y/o,2A/i,2B/i,2Y/o,G,3Y/o,3A/i,3B/i,4Y/o,4A/i,4B/i,V",
     "http://www.ti.com/lit/ds/symlink/sn74ls86a.pdf",
-    function() {
+    function () {
         for (let index = 1; index <= 4; index++) {
             xorSet(this.pin(index + "Y"), this.pin(index + "A"), this.pin(index + "B"));
         }
@@ -147,12 +147,51 @@ ics.push(newIC("74x86", "4x2i XOR",
 ics.push(newIC("74x64", "4-2-3-2 AND-OR-INVERT",
     "A/i,E/i,F/i,G/i,H/i,I/i,G,Y/o,J/i,K/i,B/i,C/i,D/i,V",
     "http://www.ti.com/lit/ds/symlink/sn54s64.pdf",
-    function() {
-        const _A = this.pin("A").state && this.pin("B").state && this.pin("C").state && this.pin("D").state;
-        const _B = this.pin("E").state && this.pin("F").state;
-        const _C = this.pin("G").state && this.pin("H").state && this.pin("I").state;
-        const _D = this.pin("J").state && this.pin("K").state;
-        this.pin("Y").state = !(_A || _B || _C || _D);
+    function () {
+        const A = this.A.state && this.B.state && this.C.state && this.D.state;
+        const B = this.E.state && this.F.state;
+        const C = this.G.state && this.H.state && this.I.state;
+        const D = this.J.state && this.K.state;
+        this.Y.state = !(A || B || C || D);
+    }, {
+        initialize() {
+            this.A = this.pin("A");
+            this.B = this.pin("B");
+            this.C = this.pin("C");
+            this.D = this.pin("D");
+            this.E = this.pin("E");
+            this.F = this.pin("F");
+            this.G = this.pin("G");
+            this.H = this.pin("H");
+            this.I = this.pin("I");
+            this.J = this.pin("J");
+            this.K = this.pin("K");
+            this.Y = this.pin("Y");
+        }
+    }
+));
+
+ics.push(newIC("74x283", "4bit Full Adder",
+    "Σ2/o,B2/i,A2/i,Σ1/o,A1/i,B1/i,CI/i,G,CO/o,Σ4/o,B4/i,A4/i,Σ3/o,A3/i,B3/i,V",
+    "http://www.ti.com/lit/ds/symlink/sn74ls283.pdf",
+    function () {
+        const A = binaryToDecimal(...this.As);
+        const B = binaryToDecimal(...this.Bs);
+        const CarryIn = this.CarryIn.state ? 1 : 0;
+        const sum = A + B + CarryIn;
+        const states = decimalToBinary(sum, 4).reverse();
+        this.setStates(this.Sums, states);
+        this.CarryOut.state = sum > 15;
+    },
+    {
+        initialize() {
+            const indexes = [...Array(4).keys()].map(index => index + 1);
+            this.As = indexes.map(index => this.pin("A" + index));
+            this.Bs = indexes.map(index => this.pin("B" + index));
+            this.Sums = indexes.map(index => this.pin("Σ" + index));
+            this.CarryIn = this.pin("CI");
+            this.CarryOut = this.pin("CO");
+        }
     }
 ));
 
