@@ -7,6 +7,15 @@ export const PIN_TYPES = {
     NC: "NC"
 };
 
+export const IC_TYPES = {
+    BUFFER: "buffer",
+    LOGIC: "logic",
+    LATCH: "latch",
+    SELECTORS: "selector",
+    DECODER: "decoder",
+    ARITHEMATIC: "arithmetic"
+};
+
 class Pin {
     constructor(number, name, type, inverted) {
         this.number = number;
@@ -48,9 +57,10 @@ function parsePins(definitions) {
 }
 
 export class IC {
-    constructor(id, name, datasheet, pins, update, optionals) {
+    constructor(id, name, type, datasheet, pins, update, optionals) {
         this.id = id;
         this.name = name;
+        this.type = type;
         this.datasheet = datasheet;
         this.pins = parsePins(pins);
         this.update = typeof update === "function" ? update : () => {};
@@ -60,6 +70,8 @@ export class IC {
         } 
         this.update();
     }
+
+    static TYPES = IC_TYPES;
 
     pin(name) {
         return this.pins.find(pin => pin.name === name);
@@ -80,7 +92,6 @@ export class IC {
             this.pin(pins[index]).state = states[index];
         }
     }
-
 }
 
 export function nandSet(y, ...inputs) {
@@ -111,16 +122,35 @@ export function xorSet(y, a, b) {
     y.state = (a.state || b.state) && !(a.state && b.state);
 }
 
+export function not(...inputs) {
+    return inputs.map(pin => !pin.state);
+}
+
+export function notSet(outputs, inputs) {
+    if (outputs.length !== inputs.length) {
+        return;
+    }
+    for (let index = 0; index < outputs.length; index++) {
+        outputs[index].state = !inputs[index].state;
+    }
+}
+
 export function binaryToDecimal(...inputs) {
     let result = 0;
     inputs.forEach((pin, index) => result += Math.pow(2, index) * (pin.state ? 1 : 0));
     return result;
 }
 
-export function decimalToBinary(value, bitCount) {
+export function decimalToBinary(value, bitCount, lsb) {
     const result = [];
     for (let bit = 0; bit < bitCount; bit++) {
-        result.unshift(value & 1 === 1);
+        const bitValue = value & 1 === 1;
+        if (lsb) {
+            result.push(bitValue);
+        } else {
+            result.unshift(bitValue);
+        }
+        
         value = value >> 1;
     }
     return result;
