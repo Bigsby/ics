@@ -1,10 +1,9 @@
-import { newIC } from "./helpers.js";
+import { IC } from "./helpers.js";
 
 const ics = [];
 
-ics.push(newIC("74x373", "8xD-Flip-Flop",
+ics.push(new IC("74x373", "8xD-Flip-Flop", "http://www.ti.com/lit/ds/symlink/sn54ls373.pdf",
     "-OC/i,1Q/o,1D/i,2D/i,2Q/o,3Q/o,3D/i,4D/i,4Q/o,G,C/i,5Q/o,5D/i,6D/i,6Q/o,7Q/o,7D/i,8D/i,8Q/o,V",
-    "http://www.ti.com/lit/ds/symlink/sn54ls373.pdf",
     function() {
         const enabled = !this.pin("OC").state;
         if (this.pin("C").state) {

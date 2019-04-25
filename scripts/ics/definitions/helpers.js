@@ -7,6 +7,18 @@ export const PIN_TYPES = {
     NC: "NC"
 };
 
+class Pin {
+    constructor(number, name, type, inverted) {
+        this.number = number;
+        this.name = name;
+        this.type = type;
+        this.inverted = !!inverted;
+        if (this.type === PIN_TYPES.INPUT) {
+            this.state = this.inverted;
+        }
+    }
+}
+
 function parsePins(definitions) {
     const result = [];
 
@@ -16,74 +28,59 @@ function parsePins(definitions) {
         if (pin.length === 1) {
             switch (pin[0]) {
                 case "N":
-                    result.push({
-                        number: number,
-                        name: "NC",
-                        type: PIN_TYPES.NC
-                    });
+                    result.push(new Pin(number, "NC", PIN_TYPES.NC));
                     break;
                 case "G":
-                    result.push({
-                        number: number,
-                        name: "GND",
-                        type: PIN_TYPES.GND
-                    });
+                    result.push(new Pin(number, "GND", PIN_TYPES.GND));
                     break;
                 case "V":
-                    result.push({
-                        number: number,
-                        name: "VCC",
-                        type: PIN_TYPES.VCC
-                    });
+                    result.push(new Pin(number, "VCC", PIN_TYPES.VCC));
                     break;
             }
         } else if (pin.length === 2) {
             const inverted = pin[0][0] === "-";
             const pinName = inverted ? pin[0].substring(1) : pin[0];
-            result.push({
-                name: pinName,
-                number: index + 1,
-                type: pin[1] === "i" ? PIN_TYPES.INPUT : PIN_TYPES.OUTPUT,
-                inverted: inverted
-            });
+            result.push(new Pin(number, pinName, pin[1] === "i" ? PIN_TYPES.INPUT : PIN_TYPES.OUTPUT, inverted));
         }
     });
 
     return result;
 }
 
-export function newIC(id, name, pinDefinitions, datasheet, update, optionals) {
-    const result = {
-        id,
-        name,
-        pins: parsePins(pinDefinitions),
-        pin(name) {
-            return this.pins.find(pin => pin.name === name);
-        },
-        setStates(pins, states) {
-            if (pins.length !== states.length) return;
+export class IC {
+    constructor(id, name, datasheet, pins, update, optionals) {
+        this.id = id;
+        this.name = name;
+        this.datasheet = datasheet;
+        this.pins = parsePins(pins);
+        this.update = typeof update === "function" ? update : () => {};
+        Object.assign(this, optionals);
+        if (typeof this.initialize === "function") {
+            this.initialize();
+        } 
+        this.update();
+    }
 
-            for (let index = 0; index < pins.length; index++) {
-                pins[index].state = states[index];
-            }
-        },
-        setStatesByName(pins, states) {
-            if (pins.length !== states.length) return;
+    pin(name) {
+        return this.pins.find(pin => pin.name === name);
+    }
 
-            for (let index = 0; index < pins.length; index++) {
-                this.pin(pins[index]).state = states[index];
-            }
-        },
-        datasheet,
-        update
-    };
-    Object.assign(result, optionals);
-    if (typeof result.initialize === "function") {
-        result.initialize();
-    } 
-    result.pins.forEach(pin => { if (pin.type === PIN_TYPES.INPUT) pin.state = false; });
-    result.update(result.pins);
-    return result;
+    setStates(pins, states) {
+        if (pins.length !== states.length) return;
+
+        for (let index = 0; index < pins.length; index++) {
+            pins[index].state = states[index];
+        }
+    }
+
+    setStatesByName(pins, states) {
+        if (pins.length !== states.length) return;
+
+        for (let index = 0; index < pins.length; index++) {
+            this.pin(pins[index]).state = states[index];
+        }
+    }
+
 }
 
 export function nandSet(y, ...inputs) {
