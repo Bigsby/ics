@@ -25,165 +25,169 @@ ics.push(new IC("74x283", "4bit Full Adder", IC.TYPES.ARITHEMATIC, "http://www.t
     }
 ));
 
+function set(Fs, calc) {
+    Fs.forEach((pin, index) => pin.state = calc(index));
+}
+
+function calculateAndSet(Fs, As, Bs, calc) {
+    const A = binaryToDecimal(As);
+    const B = binaryToDecimal(Bs);
+    const value = calc(A, B);
+    const result = decimalToBinary(value, 4, true);
+    set(Fs, index => result[index]);
+}
+
 const _74x181functions = {
-    set(Fs, calc) {
-        Fs.forEach((pin, index) => pin.state = calc(index));
-    },
-    calculateAndSet(Fs, As, Bs, calc) {
-        const A = binaryToDecimal(As);
-        const B = binaryToDecimal(Bs);
-        const value = calc(A, B);
-        const result = decimalToBinary(value, 4, true);
-        this.set(Fs, index => result[index]);
-    },
+
     // M,Cn,S3,S2,S1,S0
 
     // Logic mode
-    b100000: function (As, Bs, Fs) { // F = !A
-        this.set(Fs, index => !As[index].state);
+    b100000: function (Fs, As, Bs) { // F = !A
+        set(Fs, index => !As[index].state);
     },
-    b100001: function (As, Bs, Fs) { // F = !(A & B)
-        this.set(Fs, index => !(As[index].state && Bs[index].state));
+    b100001: function (Fs, As, Bs) { // F = !(A & B)
+        set(Fs, index => !(As[index].state && Bs[index].state));
     },
-    b100010: function (As, Bs, Fs) { // F = !A | B
-        this.set(Fs, _index => !As[index].state || Bs[index].state);
+    b100010: function (Fs, As, Bs) { // F = !A | B
+        set(Fs, _index => !As[index].state || Bs[index].state);
     },
-    b100011: function (As, Bs, Fs) { // F = 1
+    b100011: function (Fs, As, Bs) { // F = 1
         const result = decimalToBinary(1, 4, true);
-        this.set(Fs, index => result[index]);
+        set(Fs, index => result[index]);
     },
     b100100: function (Fs, As, Bs) { // F = !(A | B)
-        this.set(Fs, index => !(As[index].state || Bs[index].state));
+        set(Fs, index => !(As[index].state || Bs[index].state));
     },
     b100101: function (Fs, As, Bs) { // F = !B
-        this.set(Fs, index => !Bs[index].state);
+        set(Fs, index => !Bs[index].state);
     },
     b100110: function (Fs, As, Bs) { // F = !(A ^ B)
-        this.set(Fs, index => !((pin.state || Bs[index].state) && !(pin.state && Bs[index].state)));
+        set(Fs, index => !((pin.state || Bs[index].state) && !(pin.state && Bs[index].state)));
     },
     b100111: function (Fs, As, Bs) { // F = A | !B
-        this.set(Fs, index => As[index].state || !Bs[index].state);
+        set(Fs, index => As[index].state || !Bs[index].state);
     },
     b101000: function (Fs, As, Bs) { // F = !A & B
-        this.set(Fs, index => !As[index].state && !Bs[index].state);
+        set(Fs, index => !As[index].state && !Bs[index].state);
     },
     b101001: function (Fs, As, Bs) { // F = A ^ B
-        this.set(Fs, index => (As[index].state || Bs[index].state) && !(As[index].state && Bs[index].state));
+        set(Fs, index => (As[index].state || Bs[index].state) && !(As[index].state && Bs[index].state));
     },
     b101010: function (Fs, As, Bs) { // F = B
-        this.set(Fs, index => Bs[index].state);
+        set(Fs, index => Bs[index].state);
     },
     b101011: function (Fs, As, Bs) { // F = A | B
-        this.set(Fs, index => As[index].state || Bs[index].state);
+        set(Fs, index => As[index].state || Bs[index].state);
     },
     b101100: function (Fs, As, Bs) { // F = 0
-        this.set(Fs, _ => false);
+        set(Fs, _ => false);
     },
     b101101: function (Fs, As, Bs) { // F = A & !B
-        this.set(Fs, index => As[index].state && !Bs[index].state);
+        set(Fs, index => As[index].state && !Bs[index].state);
     },
     b101110: function (Fs, As, Bs) { // F = A & B
-        this.set(Fs, index => As[index].state && Bs[index].state);
+        set(Fs, index => As[index].state && Bs[index].state);
     },
     b101111: function (Fs, As, Bs) { // F = A
-        this.set(Fs, index => As[index].state);
+        set(Fs, index => As[index].state);
     },
+
     // Arithmetic mode
     b000000: function (...args) { // F = A - 1
-        this.calculateAndSet(...args, (A, B) => A - 1);
+        calculateAndSet(...args, (A, B) => A - 1);
     },
     b010000: function (Fs, As, Bs) { // F = A
-        this.set(Fs, index => As[index].state);
+        set(Fs, index => As[index].state);
     },
     b000001: function (...args) { // F = (A & B) - 1
-        this.calculateAndSet(...args, (A, B) => (A & B) - 1);
+        calculateAndSet(...args, (A, B) => (A & B) - 1);
     },
     b010001: function (...args) { // F = A & B
-        this.calculateAndSet(...args, (A, B) => A & B);
+        calculateAndSet(...args, (A, B) => A & B);
     },
     b000010: function (...args) { // F = (A & !B) - 1
-        this.calculateAndSet(...args, (A, B) => (A & ~B) - 1);
+        calculateAndSet(...args, (A, B) => (A & ~B) - 1);
     },
     b010010: function (...args) { // F = A & !B
-        this.calculateAndSet(...args, (A, B) => A & ~B);
+        calculateAndSet(...args, (A, B) => A & ~B);
     },
     b000011: function (Fs, As, Bs) { // F = - 1 (2' compliment)
-        this.set(Fs, _ => true);
+        set(Fs, _ => true);
     },
     b010011: function (Fs, As, Bs) { // F = ZERO
-        this.set(Fs, _ => false);
+        set(Fs, _ => false);
     },
     b000100: function (...args) { // F = A + (A | !B)
-        this.calculateAndSet(...args, (A, B) => A + (A | ~B));
+        calculateAndSet(...args, (A, B) => A + (A | ~B));
     },
     b010100: function (...args) { // F = A + (A | !B) + 1
-        this.calculateAndSet(...args, (A, B) => A + (A | ~B) + 1, 4);
+        calculateAndSet(...args, (A, B) => A + (A | ~B) + 1, 4);
     },
     b000101: function (...args) { // F = (A & B) + (A | !B)
-        this.calculateAndSet(...args, (A, B) => (A & B) + (A | ~B));
+        calculateAndSet(...args, (A, B) => (A & B) + (A | ~B));
     },
     b010101: function (...args) { // F = (A & B) + (A | !B) + 1
-        this.calculateAndSet(...args, (A, B) => (A & B) + (A | ~B) + 1);
+        calculateAndSet(...args, (A, B) => (A & B) + (A | ~B) + 1);
     },
     b000110: function (...args) { // F = A - B - 1
-        this.calculateAndSet(...args, (A, B) => A - B - 1);
+        calculateAndSet(...args, (A, B) => A - B - 1);
     },
     b010110: function (...args) { // F = A - B
-        this.calculateAndSet(...args, (A, B) => A - B);
+        calculateAndSet(...args, (A, B) => A - B);
     },
     b000111: function (Fs, As, Bs) { // F = A + !B
-        this.set(Fs, index => As[index].state || !Bs[index].state);
+        set(Fs, index => As[index].state || !Bs[index].state);
     },
     b010111: function (...args) { // F = (A + !B) + 1
-        this.calculateAndSet(...args, (A, B) => (A | ~B) + 1);
+        calculateAndSet(...args, (A, B) => (A | ~B) + 1);
     },
     b001000: function (...args) { // F = A + (A | B)
-        this.calculateAndSet(...args, (A, B) => A + (A | B));
+        calculateAndSet(...args, (A, B) => A + (A | B));
     },
     b011000: function (...args) { // F = A + (A | B) + 1
-        this.calculateAndSet(...args, (A, B) => A + (A | B) + 1);
+        calculateAndSet(...args, (A, B) => A + (A | B) + 1);
     },
     b001001: function (...args) { // F = A + B
-        this.calculateAndSet(...args, (A, B) => A + B);
+        calculateAndSet(...args, (A, B) => A + B);
     },
     b011001: function (...args) { // F = A + B + 1
-        this.calculateAndSet(...args, (A, B) => A + B + 1);
+        calculateAndSet(...args, (A, B) => A + B + 1);
     },
     b001010: function (...args) { // F = (A & !B) + (A | B)
-        this.calculateAndSet(...args, (A, B) => (A & ~B) + (A | B));
+        calculateAndSet(...args, (A, B) => (A & ~B) + (A | B));
     },
     b011010: function (...args) { // F = (A & !B) + (A | B) + 1
-        this.calculateAndSet(...args, (A, B) => (A & ~B) + (A | B) + 1);
+        calculateAndSet(...args, (A, B) => (A & ~B) + (A | B) + 1);
     },
     b001011: function (Fs, As, Bs) { // F = A | B
-        this.set(Fs, index => As[index].state || Bs[index].state);
+        set(Fs, index => As[index].state || Bs[index].state);
     },
     b011011: function (...args) { // F = (A | B) + 1
-        this.calculateAndSet(...args, (A, B) => (A | B) + 1);
+        calculateAndSet(...args, (A, B) => (A | B) + 1);
     },
     b001100: function (...args) { // F = A + A
-        this.calculateAndSet(...args, (A, B) => A + A);
+        calculateAndSet(...args, (A, B) => A + A);
     },
     b011100: function (...args) { // F = A + A + 1
-        this.calculateAndSet(...args, (A, B) => A + A + 1);
+        calculateAndSet(...args, (A, B) => A + A + 1);
     },
     b001101: function (...args) { // F = (A & B) + A
-        this.calculateAndSet(...args, (A, B) => (A & B) + A);
+        calculateAndSet(...args, (A, B) => (A & B) + A);
     },
     b011101: function (...args) { // F = (A & B) + A + 1
-        this.calculateAndSet(...args, (A, B) => (A & B) + A + 1);
+        calculateAndSet(...args, (A, B) => (A & B) + A + 1);
     },
     b001110: function (...args) { // F = (A & !B) + A
-        this.calculateAndSet(...args, (A, B) => (A & ~B) + A);
+        calculateAndSet(...args, (A, B) => (A & ~B) + A);
     },
     b011110: function (...args) { // F = (A & !B) + A + 1
-        this.calculateAndSet(...args, (A, B) => (A & ~B) + A + 1);
+        calculateAndSet(...args, (A, B) => (A & ~B) + A + 1);
     },
     b001111: function (Fs, As, Bs) { // F = A
-        this.set(Fs, index => As[index].state);
+        set(Fs, index => As[index].state);
     },
     b011111: function (...args) { // F = A + 1
-        this.calculateAndSet(...args, (A, B) => A + 1);
+        calculateAndSet(...args, (A, B) => A + 1);
     },
 };
 // ics.push(new IC("74x181", "4bit ALU", IC.TYPES.ARITHEMATIC, "http://www.ti.com/lit/ds/symlink/sn54ls181.pdf",
@@ -194,7 +198,7 @@ const _74x181functions = {
 //     },
 //     {
 //         initialize() {
-//             const indexes = [...Array(4).keys()].map(index => index + 1);
+//             const indexes = [...Array(4).keys()];
 //             this.As = indexes.map(index => this.pin("A" + index));
 //             this.Bs = indexes.map(index => this.pin("B" + index));
 //             this.Fs = indexes.map(index => this.pin("F" + index));
@@ -219,7 +223,7 @@ const _74x181functions = {
 //             functionCode += this.Ss[1].state ? "1" : 0;
 //             functionCode += this.Ss[0].state ? "1" : 0;
 
-//             const result = _74x181functions[functionCode] || (() => {});
+//             return _74x181functions[functionCode] || (() => { });
 //         }
 //     }
 // ));

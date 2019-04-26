@@ -2,9 +2,11 @@ export const PIN_TYPES = {
     INPUT: "input",
     OUTPUT: "output",
     INPUT_OUTPUT: "input_output",
+    CLOCK: "clock",
     GND: "GND",
     VCC: "VCC",
-    NC: "NC"
+    NC: "NC",
+    UNK: "UNK"
 };
 
 export const IC_TYPES = {
@@ -28,32 +30,38 @@ class Pin {
     }
 }
 
-function parsePins(definitions) {
-    const result = [];
+function parsePinType(type) {
+    switch (type) {
+        case "i": return PIN_TYPES.INPUT;
+        case "o": return PIN_TYPES.OUTPUT;
+        case "io": return PIN_TYPES.INPUT_OUTPUT;
+        case "c": return PIN_TYPES.CLOCK;
+        case "g": return PIN_TYPES.GND;
+        case "v": return PIN_TYPES.VCC;
+        case "n": return PIN_TYPES.NC;
+    }
+}
 
-    definitions.split(',').forEach((definition, index) => {
-        const pin = definition.split('/');
-        const number = index + 1;
-        if (pin.length === 1) {
-            switch (pin[0]) {
-                case "N":
-                    result.push(new Pin(number, "NC", PIN_TYPES.NC));
-                    break;
-                case "G":
-                    result.push(new Pin(number, "GND", PIN_TYPES.GND));
-                    break;
-                case "V":
-                    result.push(new Pin(number, "VCC", PIN_TYPES.VCC));
-                    break;
-            }
-        } else if (pin.length === 2) {
-            const inverted = pin[0][0] === "-";
-            const pinName = inverted ? pin[0].substring(1) : pin[0];
-            result.push(new Pin(number, pinName, pin[1] === "i" ? PIN_TYPES.INPUT : PIN_TYPES.OUTPUT, inverted));
+function parsePin(definition, number) {
+    const values = definition.split("/");
+    if (values.length === 1) { // standard pins
+        switch (values[0]) {
+            case "C": return new Pin(number, "CLK", PIN_TYPES.CLOCK);
+            case "N": return new Pin(number, "NC", PIN_TYPES.NC);
+            case "G": return new Pin(number, "GND", PIN_TYPES.GND);
+            case "V": return new Pin(number, "VCC", PIN_TYPES.VCC);
         }
-    });
+    } else if (values.length === 2) {
+        const inverted = values[0][0] === "-";
+        const pinName = inverted ? values[0].substring(1) : values[0];
+        return new Pin(number, pinName, parsePinType(values[1]), inverted);
+    } else {
+        return new Pin(number, "UNK", PIN_TYPES.UNK);
+    }
+}
 
-    return result;
+function parsePins(definitions) {
+    return definitions.split(',').map((definition, index) => parsePin(definition, index + 1));
 }
 
 export class IC {
@@ -63,11 +71,11 @@ export class IC {
         this.type = type;
         this.datasheet = datasheet;
         this.pins = parsePins(pins);
-        this.update = typeof update === "function" ? update : () => {};
+        this.update = typeof update === "function" ? update : () => { };
         Object.assign(this, optionals);
         if (typeof this.initialize === "function") {
             this.initialize();
-        } 
+        }
         this.update();
     }
 
@@ -150,7 +158,7 @@ export function decimalToBinary(value, bitCount, lsb) {
         } else {
             result.unshift(bitValue);
         }
-        
+
         value = value >> 1;
     }
     return result;
