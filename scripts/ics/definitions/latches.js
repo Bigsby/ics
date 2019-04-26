@@ -52,12 +52,27 @@ const _62256addresses = [...Array(15).keys()].map(index => "A" + index);
 
 // ics.push(new IC("74x173", "4bit Register 3-State", IC.TYPES.LATCH, "http://www.ti.com/lit/ds/symlink/sn54ls173a.pdf",
 //     "M/i,N/i,1Q/o,2Q/o,3Q/o,4Q/o,C,G,-G1/i,-G2/i,4D/i,3D/i,2D/i,1D/i,CLR/i,V",
-//     function () {
-        
+//     function (changedPin) {
+//         if (this.CLR.state) {
+//             this.internalState = [false, false, false, false];
+//         } else if (changedPin.name === "CLK" && changedPin.state === true) {
+
+//         } else {
+
+//         }
+//         this.setStates(this.Qs, this.internalState);
 //     },
 //     {
 //         initialize() {
-        
+//             const indexes = [...Array(4).keys()].map(index => index + 1);
+//             this.internalState = [false, false, false, false];
+//             this.Ds = indexes.map(index => this.pin(index + "D"));
+//             this.Qs = indexes.map(index => this.pin(index + "Q"));
+//             this.CLR = this.pin("CLR");
+//             this.M = this.pin("M");
+//             this.N = this.pin("N");
+//             this.G1 = this.pin("G1");
+//             this.G2 = this.pin("G2");
 //         }
 //     }
 // ));
