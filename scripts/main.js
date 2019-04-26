@@ -70,7 +70,8 @@ new Vue({
     data() {
         return {
             ics: [],
-            search: ""
+            search: "",
+            displayLegend: false
         };
     },
     watch: {

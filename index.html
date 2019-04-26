@@ -7,63 +7,68 @@
     <title>Integrated Circuits</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='./styles/main.css'>
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
 </head>
 <!-- https://codepen.io/billyfb/pen/XQYoOg -->
+
 <body>
-    <h1>Integrated Circuits</h1>
     <div id="appContainer">
+        <h1 class="title">Integrated Circuits</h1>
         <div id="searchContainer">
             <label for="search">Search</label>
             <input id="search" v-model="search" />
             <span>(RegEx)</span>
         </div>
-        <div id="legendContainer">
-            <div class="legendItem">
-                <div class="pin-number NC">x</div>
-                <label>Not Connected</label>
-            </div>
-            <div class="legendItem">
-                <div class="pin-number GND">x</div>
-                <label>Ground</label>
-            </div>
-            <div class="legendItem">
-                <div class="pin-number VCC">x</div>
-                <label>VCC</label>
-            </div>
-            <div class="legendItem">
-                <div class="pin-number HIGH">x</div>
-                <label>High State</label>
-            </div>
-            <div class="legendItem">
-                <div class="pin-number LOW">x</div>
-                <label>Low State</label>
-            </div>
-            <div class="legendItem">
-                <div class="pin-number input">x
-                    <div class="io left input"></div>
+        <div id="icsContainer">
+            <ic-display v-for="ic in ics" :ic="ic" :key="ic.id"></ic-display>
+        </div>
+        <div id="legendWrapper">
+            <button @click="displayLegend = !displayLegend">?</button>
+            <div v-show="displayLegend" id="legendContainer">
+                <div class="legendItem">
+                    <div class="pin-number NC">x</div>
+                    <label>Not Connected</label>
                 </div>
-                <label>Inputt</label>
-            </div>
-            <div class="legendItem">
-                <div class="pin-number output">x
-                        <div class="io left output"></div>
+                <div class="legendItem">
+                    <div class="pin-number GND">x</div>
+                    <label>Ground</label>
                 </div>
-                <label>Output</label>
-            </div>
-            <div class="legendItem">
+                <div class="legendItem">
+                    <div class="pin-number VCC">x</div>
+                    <label>VCC</label>
+                </div>
+                <div class="legendItem">
+                    <div class="pin-number HIGH">x</div>
+                    <label>High State</label>
+                </div>
+                <div class="legendItem">
+                    <div class="pin-number LOW">x</div>
+                    <label>Low State</label>
+                </div>
+                <div class="legendItem extra">
+                    <div class="pin-number input">x
+                        <div class="io left input"></div>
+                    </div>
+                    <label>Inputt</label>
+                </div>
+                <div class="legendItem extra">
                     <div class="pin-number output">x
-                            <div class="io left input_output"></div>
+                        <div class="io left output"></div>
+                    </div>
+                    <label>Output</label>
+                </div>
+                <div class="legendItem extra">
+                    <div class="pin-number output">x
+                        <div class="io left input_output"></div>
                     </div>
                     <label>Input and Output</label>
                 </div>
-            <div class="legendItem">
-                <div class="pin-number NC">x</div>
-                <label class="inverted">Inverted Signal</label>
+                <div class="legendItem">
+                    <div class="pin-number NC">x</div>
+                    <label class="inverted">Inverted Signal</label>
+                </div>
             </div>
-        </div>
-        <div id="icsContainer">
-            <ic-display v-for="ic in ics" :ic="ic" :key="ic.id"></ic-display>
         </div>
     </div>
     <script type="text/template" id="pin-template">
@@ -72,12 +77,12 @@
                 {{pin.number}}
                 <div :class="['io', side, pin.type]"></div>
             </div>
-            <div :class="['pin-name', side, pin.type, {inverted: pin.inverted}]"><span>{{pin.name}}<span></span></div>
+            <div :class="['pin-name', side, pin.type, {inverted: pin.inverted}]"><span>{{pin.name}}</span></div>
         </div>
     </script>
     <script type="text/template" id="pin-strip-template">
         <div class="pin-strip">
-            <pin v-for="pin in pins" :pin="pin" @clicked="pinClicked($event)" :side="side"></pin>
+            <pin v-for="pin in pins" :pin="pin" @clicked="pinClicked($event)" :side="side" :key="pin.number"></pin>
         </div>
     </script>
     <script type="text/template" id="pin-names-template">

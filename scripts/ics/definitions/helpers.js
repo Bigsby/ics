@@ -19,10 +19,11 @@ export const IC_TYPES = {
 };
 
 class Pin {
-    constructor(number, name, type, inverted) {
+    constructor(number, name, type, inverted, definition) {
         this.number = number;
         this.name = name;
         this.type = type;
+        this.definition = definition;
         this.inverted = !!inverted;
         if (this.type === PIN_TYPES.INPUT) {
             this.state = this.inverted;
@@ -46,17 +47,17 @@ function parsePin(definition, number) {
     const values = definition.split("/");
     if (values.length === 1) { // standard pins
         switch (values[0]) {
-            case "C": return new Pin(number, "CLK", PIN_TYPES.CLOCK);
-            case "N": return new Pin(number, "NC", PIN_TYPES.NC);
-            case "G": return new Pin(number, "GND", PIN_TYPES.GND);
-            case "V": return new Pin(number, "VCC", PIN_TYPES.VCC);
+            case "C": return new Pin(number, "CLK", PIN_TYPES.CLOCK, definition);
+            case "N": return new Pin(number, "NC", PIN_TYPES.NC, definition);
+            case "G": return new Pin(number, "GND", PIN_TYPES.GND, definition);
+            case "V": return new Pin(number, "VCC", PIN_TYPES.VCC, definition);
         }
     } else if (values.length === 2) {
         const inverted = values[0][0] === "-";
         const pinName = inverted ? values[0].substring(1) : values[0];
-        return new Pin(number, pinName, parsePinType(values[1]), inverted);
+        return new Pin(number, pinName, parsePinType(values[1]), inverted, definition);
     } else {
-        return new Pin(number, "UNK", PIN_TYPES.UNK);
+        return new Pin(number, "UNK", PIN_TYPES.UNK, false, definition);
     }
 }
 
@@ -71,6 +72,7 @@ export class IC {
         this.type = type;
         this.datasheet = datasheet;
         this.pins = parsePins(pins);
+        this.pinCount = this.pins.length;
         this.update = typeof update === "function" ? update : () => { };
         Object.assign(this, optionals);
         if (typeof this.initialize === "function") {

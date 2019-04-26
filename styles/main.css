@@ -1,6 +1,21 @@
 html,
 body {
     font-family: sans-serif;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+div#appContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+h1.title {
+    text-align: center;
 }
 
 div#searchContainer {
@@ -13,16 +28,25 @@ div#searchContainer input {
     margin: 10px;
 }
 
+div#legendWrapper {
+    display: flex;
+}
+
 div#legendContainer {
     display: flex;
     justify-content: space-around;
     align-items: center;
     flex-wrap: wrap;
+    flex-grow: 1;
 }
 
 div.legendItem {
     display: flex;
     align-items: center;
+}
+
+div.legendItem.extra {
+    margin-left: 20px;
 }
 
 div.legendItem label.input {
@@ -40,10 +64,13 @@ div.legendItem .pin-number {
 div#icsContainer {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
+    align-content: flex-start;
     width: auto;
     flex-wrap: wrap;
     justify-content: space-evenly;
+    flex-grow: 1;
+    overflow-y: auto;
 }
 
 div.icContainer {
@@ -150,7 +177,7 @@ div.io {
     top: 0;
 }
 
-div.io.left {    
+div.io.left {
     right: 100%;
     border-bottom: .6em solid transparent;
     border-top: .6em solid transparent;
