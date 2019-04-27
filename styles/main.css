@@ -49,10 +49,6 @@ div.legendItem.extra {
     margin-left: 20px;
 }
 
-div.legendItem label.input {
-    font-weight: bold;
-}
-
 div.legendItem label.inverted {
     border-top: 1px solid black;
 }
@@ -138,7 +134,7 @@ div.pin-number {
                                   supported by Chrome and Opera */
 }
 
-div.pin-number.input {
+div.pin-number.input, div.pin-number.clock {
     cursor: pointer;
 }
 
@@ -183,7 +179,7 @@ div.io.left {
     border-top: .6em solid transparent;
 }
 
-div.io.left.input {
+div.io.left.input, div.io.left.clock {
     border-left: .8em solid black;
     border-right: 0;
 }
@@ -204,7 +200,7 @@ div.io.right {
     border-top: .6em solid transparent;
 }
 
-div.io.right.input {
+div.io.right.input, div.io.right.clock {
     border-left: 0;
     border-right: .8em solid black;
 }

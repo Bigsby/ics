@@ -13,9 +13,10 @@ export const IC_TYPES = {
     BUFFER: "buffer",
     LOGIC: "logic",
     LATCH: "latch",
-    SELECTORS: "selector",
+    SELECTOR: "selector",
     DECODER: "decoder",
-    ARITHEMATIC: "arithmetic"
+    ARITHEMATIC: "arithmetic",
+    COUNTER: "counter"
 };
 
 class Pin {
@@ -47,10 +48,10 @@ function parsePin(definition, number) {
     const values = definition.split("/");
     if (values.length === 1) { // standard pins
         switch (values[0]) {
-            case "C": return new Pin(number, "CLK", PIN_TYPES.CLOCK, definition);
-            case "N": return new Pin(number, "NC", PIN_TYPES.NC, definition);
-            case "G": return new Pin(number, "GND", PIN_TYPES.GND, definition);
-            case "V": return new Pin(number, "VCC", PIN_TYPES.VCC, definition);
+            case "C": return new Pin(number, "CLK", PIN_TYPES.CLOCK, false, definition);
+            case "N": return new Pin(number, "NC", PIN_TYPES.NC, false, definition);
+            case "G": return new Pin(number, "GND", PIN_TYPES.GND, false, definition);
+            case "V": return new Pin(number, "VCC", PIN_TYPES.VCC, false, definition);
         }
     } else if (values.length === 2) {
         const inverted = values[0][0] === "-";

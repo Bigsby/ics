@@ -4,8 +4,9 @@ import latches from "./definitions/latches.js";
 import logic from  "./definitions/logic.js";
 import selectors from "./definitions/selectors.js";
 import arithmetic from "./definitions/arithmetic.js";
+import counters from "./definitions/counters.js";
 
-const ics = [].concat(buffers, decoders, latches, logic, selectors, arithmetic);
+const ics = [].concat(buffers, decoders, latches, logic, selectors, arithmetic, counters);
 
 ics.sort((a, b) => {
     if (a.id < b.id)

@@ -20,11 +20,6 @@ Vue.component("pin-strip", {
     }
 });
 
-Vue.component("pin-names", {
-    template: document.getElementById("pin-names-template"),
-    props: ["pins", "side"]
-});
-
 Vue.component("ic-package", {
     template: document.getElementById("ic-package-template"),
     props: ["leftPins", "rightPins"]
