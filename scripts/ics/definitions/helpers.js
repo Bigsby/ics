@@ -35,6 +35,10 @@ class Pin {
     acceptInput() {
         return this.type === PIN_TYPES.INPUT || this.type === PIN_TYPES.INPUT_OUTPUT || this.type === PIN_TYPES.CLOCK;
     }
+
+    is(name) {
+        return this.name === name;
+    }
 }
 
 function parsePinType(type) {

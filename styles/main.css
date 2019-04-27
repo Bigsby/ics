@@ -24,6 +24,10 @@ div#searchContainer {
     align-items: center;
 }
 
+div#searchContainer sub {
+    font-size: .5em;
+}
+
 div#searchContainer input {
     margin: 10px;
 }
@@ -181,7 +185,19 @@ div.io.left {
 
 div.io.left.input, div.io.left.clock {
     border-left: .8em solid black;
+    /* border-left-color: black;
+    border-left-width: .8em;
+    border-left-style: solid; */
     border-right: 0;
+}
+
+/* div.io.left.input {
+    border-left-color: black;
+    border-right: 0;
+} */
+
+div.io.left.clock {
+    border-left-color: lightgrey;
 }
 
 div.io.left.output {
@@ -203,6 +219,10 @@ div.io.right {
 div.io.right.input, div.io.right.clock {
     border-left: 0;
     border-right: .8em solid black;
+}
+
+div.io.right.clock {
+    border-right-color: lightgrey;
 }
 
 div.io.right.output {

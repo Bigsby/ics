@@ -84,5 +84,8 @@ new Vue({
     created() {
         this.completeList = ics;
         this.ics = this.completeList;
+    },
+    mounted() {
+        this.$refs.search.focus();
     }
 });

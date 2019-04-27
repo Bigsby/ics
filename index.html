@@ -17,8 +17,8 @@
         <h1 class="title">Integrated Circuits</h1>
         <div id="searchContainer">
             <label for="search">Search</label>
-            <input id="search" v-model="search" />
-            <span>(RegEx)</span>
+            <input ref="search" id="search" v-model="search" autofocus />
+            <sub>(RegEx)</sub>
         </div>
         <div id="icsContainer">
             <ic-display v-for="ic in ics" :ic="ic" :key="ic.id"></ic-display>
@@ -53,16 +53,22 @@
                     <label>Input</label>
                 </div>
                 <div class="legendItem extra">
-                    <div class="pin-number output">x
-                        <div class="io left output"></div>
+                    <div class="pin-number input">x
+                        <div class="io left clock"></div>
                     </div>
-                    <label>Output</label>
+                    <label>Clock Input</label>
                 </div>
                 <div class="legendItem extra">
                     <div class="pin-number output">x
                         <div class="io left input_output"></div>
                     </div>
                     <label>Input and Output</label>
+                </div>
+                <div class="legendItem extra">
+                    <div class="pin-number output">x
+                        <div class="io left output"></div>
+                    </div>
+                    <label>Output</label>
                 </div>
                 <div class="legendItem">
                     <div class="pin-number NC">x</div>
