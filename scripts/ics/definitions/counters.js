@@ -32,7 +32,7 @@ ics.push(new IC("74x93", "4bit Binary Counter", IC.TYPES.COUNTER, "http://www.ti
     }
 ));
 
-ics.push(new IC("74x193", "4bir Up/Down Counter", IC.TYPES.COUNTER, "http://www.ti.com/lit/ds/symlink/sn74ls193.pdf",
+ics.push(new IC("74x193", "4bit Up/Down Counter", IC.TYPES.COUNTER, "http://www.ti.com/lit/ds/symlink/sn74ls193.pdf",
     "B/i,QB/o,QA/o,DOWN/c,UP/c,QC/o,QD/o,G,D/i,C/i,-LOAD/i,-CO/o,-BO/o,CLR/i,A/i,V",
     function (changedPin) {
         if (!this.Load.state) {
