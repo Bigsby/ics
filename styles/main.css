@@ -71,6 +71,7 @@ div#icsContainer {
     justify-content: space-evenly;
     flex-grow: 1;
     overflow-y: auto;
+    font-size: 20px;
 }
 
 div.icContainer {
@@ -105,7 +106,7 @@ div.ic-box {
     border: 1px solid black;
     display: flex;
     justify-content: space-around;
-    width: 60px;
+    width: 5em;
 }
 
 div.pin-strip {
@@ -120,7 +121,7 @@ div.pin {
 div.pin-number {
     position: relative;
     border: 1px solid black;
-    width: 20px;
+    width: 1.75em;
     margin: 2px 0;
     text-align: center;
     -webkit-touch-callout: none;
@@ -232,7 +233,7 @@ div.io.right.output {
 
 div.pin .pin-name {
     position: absolute;
-    top: 3px;
+    top: .1em;
 }
 
 div.pin .pin-name.inverted {
@@ -240,9 +241,9 @@ div.pin .pin-name.inverted {
 }
 
 div.pin .pin-name.left {
-    left: 27px;
+    left: 2.2em;
 }
 
 div.pin .pin-name.right {
-    right: 27px;
+    right: 2.2em;
 }
