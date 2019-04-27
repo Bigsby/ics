@@ -5,7 +5,9 @@ Vue.component("pin", {
     props: ["pin", "side"],
     methods: {
         clicked() {
-            this.$emit("clicked", this.pin);
+            if (this.pin.acceptInput()) {
+                this.$emit("clicked", this.pin);
+            }
         }
     }
 });
@@ -70,7 +72,7 @@ new Vue({
         };
     },
     watch: {
-        search: function(newValue) {
+        search: function (newValue) {
             if (newValue) {
                 const regEx = new RegExp(newValue, "i");
                 this.ics = this.completeList.filter(ic => regEx.test(ic.id) || regEx.test(ic.name));
