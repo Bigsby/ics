@@ -28,9 +28,9 @@ class Pin {
         this.inverted = !!inverted;
         if (this.type === PIN_TYPES.INPUT) {
             this.state = this.inverted;
+        } else {
+            this.state = false;
         }
-        
-        
     }
 
     acceptInput() {
