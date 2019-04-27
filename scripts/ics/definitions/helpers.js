@@ -26,10 +26,9 @@ class Pin {
         this.type = type;
         this.definition = definition;
         this.inverted = !!inverted;
+        this.state = false;
         if (this.type === PIN_TYPES.INPUT) {
             this.state = this.inverted;
-        } else {
-            this.state = false;
         }
     }
 
