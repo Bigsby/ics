@@ -38,8 +38,7 @@ div#legendWrapper {
 
 div#legendContainer {
     display: flex;
-    justify-content: space-around;
-    align-items: center;
+    justify-content: start;
     flex-wrap: wrap;
     flex-grow: 1;
 }
@@ -47,6 +46,7 @@ div#legendContainer {
 div.legendItem {
     display: flex;
     align-items: center;
+    margin-right: 10px;
 }
 
 div.legendItem.extra {
@@ -180,45 +180,49 @@ div.io {
 
 div.io.left {
     right: 100%;
-    border-bottom: .6em solid transparent;
-    border-top: .6em solid transparent;
 }
 
 div.io.left.input, div.io.left.clock {
-    border-left: .8em solid black;
-    /* border-left-color: black;
-    border-left-width: .8em;
-    border-left-style: solid; */
+    border-left: .8em solid black;    
+    border-bottom: .6em solid transparent;
+    border-top: .6em solid transparent;
     border-right: 0;
 }
-
-/* div.io.left.input {
-    border-left-color: black;
-    border-right: 0;
-} */
 
 div.io.left.clock {
     border-left-color: lightgrey;
 }
 
+div.io.left.clock-raising::before {
+    content: "↑";
+}
+
+div.io.left.clock-falling::before {
+    content: "↓";
+}
+
 div.io.left.output {
     border-left: 0;
     border-right: .8em solid black;
+    border-bottom: .6em solid transparent;
+    border-top: .6em solid transparent;
 }
 
 div.io.input_output {
     border-left: .4em solid black;
     border-right: .4em solid black;
-}
-
-div.io.right {
-    left: 100%;
     border-bottom: .6em solid transparent;
     border-top: .6em solid transparent;
 }
 
+div.io.right {
+    left: 100%;
+}
+
 div.io.right.input, div.io.right.clock {
     border-left: 0;
+    border-bottom: .6em solid transparent;
+    border-top: .6em solid transparent;
     border-right: .8em solid black;
 }
 
@@ -226,9 +230,24 @@ div.io.right.clock {
     border-right-color: lightgrey;
 }
 
+div.io.right.clock-raising::before {
+    content: "↑";
+}
+
+div.io.right.clock-falling::before {
+    content: "↓";
+}
+
+div.io.clock-raising::before, div.io.clock-falling::before {
+    font-size: 2em;
+    line-height: 0.45em;
+}
+
 div.io.right.output {
     border-left: .8em solid black;
     border-right: 0;
+    border-bottom: .6em solid transparent;
+    border-top: .6em solid transparent;
 }
 
 div.pin .pin-name {

@@ -3,6 +3,8 @@ export const PIN_TYPES = {
     OUTPUT: "output",
     INPUT_OUTPUT: "input_output",
     CLOCK: "clock",
+    CLOCK_R: "clock-raising",
+    CLOCK_F: "clock-falling",
     GND: "GND",
     VCC: "VCC",
     NC: "NC",
@@ -47,6 +49,8 @@ function parsePinType(type) {
         case "o": return PIN_TYPES.OUTPUT;
         case "io": return PIN_TYPES.INPUT_OUTPUT;
         case "c": return PIN_TYPES.CLOCK;
+        case "cr": return PIN_TYPES.CLOCK_R;
+        case "cf": return PIN_TYPES.CLOCK_F;
         case "g": return PIN_TYPES.GND;
         case "v": return PIN_TYPES.VCC;
         case "n": return PIN_TYPES.NC;
