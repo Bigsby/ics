@@ -21,6 +21,14 @@ export const IC_TYPES = {
     COUNTER: "counter"
 };
 
+const INPUT_PIN_TYPES = [
+    PIN_TYPES.INPUT,
+    PIN_TYPES.INPUT_OUTPUT,
+    PIN_TYPES.CLOCK,
+    PIN_TYPES.CLOCK_F,
+    PIN_TYPES.CLOCK_R
+];
+
 class Pin {
     constructor(number, name, type, inverted, definition) {
         this.number = number;
@@ -34,8 +42,10 @@ class Pin {
         }
     }
 
+    
+
     acceptInput() {
-        return this.type === PIN_TYPES.INPUT || this.type === PIN_TYPES.INPUT_OUTPUT || this.type === PIN_TYPES.CLOCK;
+        return INPUT_PIN_TYPES.includes(this.type);
     }
 
     is(name) {
