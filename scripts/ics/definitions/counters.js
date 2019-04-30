@@ -78,4 +78,39 @@ ics.push(new IC("74x193", "4bit Up/Down Counter", IC.TYPES.COUNTER, "http://www.
         }
     }
 ));
+
+// ics.push(new IC("74x191", "4bit Up/Down Counter", IC.TYPES.COUNTER, "http://www.ti.com/lit/ds/symlink/sn74ls90.pdf",
+//     "B/i,QB/o,QA/o,-CTEN/i,D|-U/i,QC/o,QD/o,G,D/i,C/i,-LOAD/i,MAX|MIN/o,-RCO/o,CLK/cr,A/i,V",
+//     function(changedPin) {},
+//     {
+//         initialize() {
+//             const names = ["A", "B", "C", "D"];
+//             this.inputs = names.map(name => this.pin(name));
+//             this.outputs = names.map(name => this.pin("Q" + name));
+//             this.Load = this.pin("LOAD");
+//             this.DownUp = this.pin("D|-U");
+//             this.CountEnable = this.pin("CTEN");
+//         }
+//     }
+// ));
+
+// ics.push(new IC("74x90", "Decade Coutner", IC.TYPES.COUNTER, "http://www.ti.com/lit/ds/symlink/sn74ls90.pdf",
+//     "CKB/cr,R0(1)/i,R0(2)/i,N,V,R9(1)/i,R9(2)/i,QC/o,QB/o,G,QD/o,QA/o,N,CKA/cr",
+//     function() {
+//         //todo check if clock is raising of falling
+//     },
+//     {
+//         initialize() {
+//             const names = ["A", "B", "C", "D"];
+//             this.outputs = names.map(name => this.pin("Q" + name));
+//             this.R01 = this.pin("R0(1)");
+//             this.R02 = this.pin("R0(2)");
+//             this.R91 = this.pin("R9(1)");
+//             this.R92 = this.pin("R9(2)");
+//             this.CKA = this.pin("CKA");
+//             this.CKA = this.pin("CKB");
+//         }   
+//     }
+// ));
+
 export default ics;
