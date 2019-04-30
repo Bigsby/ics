@@ -18,6 +18,10 @@ h1.title {
     text-align: center;
 }
 
+.github-link img {
+    height: 2em;
+}
+
 div#searchContainer {
     display: flex;
     justify-content: center;
