@@ -105,7 +105,7 @@ export class IC {
         this.update();
     }
 
-    static TYPES = IC_TYPES;
+    static get TYPES() { return IC_TYPES; }
 
     pin(name) {
         return this.pins.find(pin => pin.name === name);

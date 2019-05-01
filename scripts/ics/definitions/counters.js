@@ -55,7 +55,7 @@ ics.push(new IC("74x193", "4bit Up/Down Counter", IC.TYPES.COUNTER, "http://www.
                     } else {
                         this.BO.state = this.count != 0;
                     }
-                }   
+                }
             }
         }
         this.setStates(this.outputs, decimalToBinary(this.count, 4, true));
@@ -94,23 +94,42 @@ ics.push(new IC("74x193", "4bit Up/Down Counter", IC.TYPES.COUNTER, "http://www.
 //     }
 // ));
 
-// ics.push(new IC("74x90", "Decade Coutner", IC.TYPES.COUNTER, "http://www.ti.com/lit/ds/symlink/sn74ls90.pdf",
-//     "CKB/cr,R0(1)/i,R0(2)/i,N,V,R9(1)/i,R9(2)/i,QC/o,QB/o,G,QD/o,QA/o,N,CKA/cr",
-//     function() {
-//         //todo check if clock is raising of falling
-//     },
-//     {
-//         initialize() {
-//             const names = ["A", "B", "C", "D"];
-//             this.outputs = names.map(name => this.pin("Q" + name));
-//             this.R01 = this.pin("R0(1)");
-//             this.R02 = this.pin("R0(2)");
-//             this.R91 = this.pin("R9(1)");
-//             this.R92 = this.pin("R9(2)");
-//             this.CKA = this.pin("CKA");
-//             this.CKA = this.pin("CKB");
-//         }   
-//     }
-// ));
+ics.push(new IC("74x90", "Decade Coutner", IC.TYPES.COUNTER, "http://www.ti.com/lit/ds/symlink/sn74ls90.pdf",
+    "CKB/cf,R0(1)/i,R0(2)/i,N,V,R9(1)/i,R9(2)/i,QC/o,QB/o,G,QD/o,QA/o,N,CKA/cf",
+    function (changedPin) {
+        const controlState = binaryToDecimal(...this.controlPins);
+        if (controlState >= 12) {
+            this.QA.state = true;
+            this.Bs = 4;
+        } else if ((controlState & 3) === 3) {
+            this.QA.state = false;
+            this.Bs = 0;
+        } else if (changedPin) {
+            if (changedPin.is("CKA") && !changedPin.state) {
+                this.QA.state = !this.QA.state;
+            } else if (changedPin.is("CKB") && !changedPin.state) {
+                this.Bs = this.Bs == 5 ? 0 : this.Bs + 1;
+            }
+        }
+        this.setStates(this.Boutputs, decimalToBinary(this.Bs, 3, true));
+    },
+    {
+        initialize() {
+            const names = ["B", "C", "D"];
+            this.QA = this.pin("QA");
+            this.Boutputs = names.map(name => this.pin("Q" + name));
+            this.controlPins = [
+                this.pin("R0(1)"), // 1
+                this.pin("R0(2)"), // 2
+                this.pin("R9(1)"), // 4
+                this.pin("R9(2)")  // 8
+            ];
+            this.CKA = this.pin("CKA");
+            this.CKA = this.pin("CKB");
+            this.QA.state = false;
+            this.Bs = 0;
+        }
+    }
+));
 
 export default ics;
