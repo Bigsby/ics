@@ -46,13 +46,14 @@ const INPUT_PIN_TYPES = [
 // n = not connected
 
 class Pin {
-    constructor(number, name, type, inverted, definition) {
+    constructor(number, name, type, inverted, definition, description) {
         this.number = number;
         this.name = name;
         this.type = type;
         this.definition = definition;
         this.inverted = !!inverted;
         this.state = false;
+        this.description = description;
         if (this.type === PIN_TYPES.INPUT) {
             this.state = this.inverted;
         }
@@ -86,9 +87,9 @@ function parsePin(definition, number) {
     const values = definition.split("|");
     if (values.length === 1) { // standard pins
         switch (values[0]) {
-            case "N": return new Pin(number, "NC", PIN_TYPES.NC, false, definition);
-            case "G": return new Pin(number, "GND", PIN_TYPES.GND, false, definition);
-            case "V": return new Pin(number, "VCC", PIN_TYPES.VCC, false, definition);
+            case "N": return new Pin(number, "NC", PIN_TYPES.NC, false, definition, "Not connected");
+            case "G": return new Pin(number, "GND", PIN_TYPES.GND, false, definition, "Ground (0v)");
+            case "V": return new Pin(number, "VCC", PIN_TYPES.VCC, false, definition, "Voltage Common Collector");
         }
     } else if (values.length === 2) {
         const inverted = values[0][0] === "-";
@@ -113,6 +114,16 @@ export class IC {
         this.pinCount = this.pins.length;
         this.update = typeof update === "function" ? update : () => { };
         Object.assign(this, optionals);
+        if (this.descriptions) {
+            for (const pinName in this.descriptions) {
+                const pin = this.pin(pinName);
+                if (pin) {
+                    pin.description = this.descriptions[pinName];
+                } else {
+                    console.error("unable to find pin for descriptinos " + pinName + " for " + id);
+                }
+            }
+        }
         if (typeof this.initialize === "function") {
             this.initialize();
         }

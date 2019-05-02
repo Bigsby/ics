@@ -28,6 +28,16 @@ ics.push(new IC("74x93", "4bit Binary Counter", IC.TYPES.COUNTER, "http://www.ti
             this.QBs = ["D", "C", "B"].map(index => this.pin("Q" + index));
             this.Bstate = 0;
             this.Astate = false;
+        },
+        descriptions: {
+            CKA: "Falling edge clock for A",
+            CKB: "Falling edge clock for B, C and D",
+            QA: "CKA output (usually connected to CKB",
+            QB: "1st bit (LSBF) of CKB output",
+            QC: "2nd bit (LSBF) of CKB output",
+            QD: "3rd bit (LSBF) of CKB output",
+            "R0(1)": "AND with R0(2) set all outputs LOW",
+            "R0(2)":  "AND with R0(1) set all outputs LOW"
         }
     }
 ));
@@ -75,6 +85,22 @@ ics.push(new IC("74x193", "4bit Up/Down Counter", IC.TYPES.COUNTER, "http://www.
 
             this.CO.state = true;
             this.BO.state = true;
+        },
+        descriptions: {
+            UP: "Clock to count up",
+            DOWN: "Clock to count down",
+            CO: "Goes LOW on falling edge of UP when QA, QB, QC and QD are HIGH",
+            BO: "Goes LOW on falling edge of DOWN when QA, QB, QC and QD are LOW",
+            QA: "1st bit (LSBF) output",
+            QB: "2nd bit (LSBF) output",
+            QC: "3rd bit (LSBF) output",
+            QD: "4th bit (LSBF) output",
+            A: "1st bit (LSBF) input",
+            B: "2nd bit (LSBF) input",
+            C: "3rd bit (LSBF) input",
+            D: "4th bit (LSBF) input",
+            LOAD: "Falling edge set input into output",
+            CLR: "Clear setting all outputs bits LOW"
         }
     }
 ));
@@ -128,6 +154,18 @@ ics.push(new IC("74x90", "Decade Coutner", IC.TYPES.COUNTER, "http://www.ti.com/
             this.CKA = this.pin("CKB");
             this.QA.state = false;
             this.Bs = 0;
+        },
+        descriptions: {
+            CKA: "Falling edge clock for A (usually connected to CKB)",
+            CKB: "Falling edge clock for B,C & D",
+            QA: "CKA output (usually connected to CKB",
+            QB: "1st bit (LSBF) of CKB output (0 to 4)",
+            QC: "2nd bit (LSBF) of CKB output (0 to 4)",
+            QD: "3rd bit (LSBF) of CKB output (0 to 4)",
+            "R0(1)": "AND R0(2) AND (R9(1) NOR R9(2)) all outputs LOW",
+            "R0(2)": "AND R0(1) AND (R9(1) NOR R9(2)) all outputs LOW",
+            "R9(1)": "AND R9(2) output A and D HIGH and B and C LOW",
+            "R9(2)": "AND R9(1) output A and D HIGH and B and C LOW"
         }
     }
 ));

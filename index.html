@@ -94,7 +94,7 @@
     </div>
     <script type="text/template" id="pin-template">
         <div class="pin">
-            <div :class="['pin-number', side, pin.type, pin.state ? 'HIGH' : 'LOW']" @click="clicked">
+            <div :class="['pin-number', side, pin.type, pin.state ? 'HIGH' : 'LOW']" @click="clicked" :title="pin.description">
                 {{pin.number}}
                 <div :class="['io', side, pin.type]"></div>
             </div>

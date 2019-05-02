@@ -18,6 +18,26 @@ ics.push(new IC("74x373", "8xD-Flip-Flop", IC.TYPES.LATCH, "http://www.ti.com/li
             const indexes = [...Array(8).keys()].map(index => index + 1);
             this.Qs = indexes.map(index => this.pin(index + "Q"));
             this.Ds = indexes.map(index => this.pin(index + "D"));
+        },
+        descriptions: {
+            "1D": "Input for 1Q",
+            "1Q": "Output for latched 1D",
+            "2D": "Input for 2Q",
+            "2Q": "Output for latched 2D",
+            "3D": "Input for 3Q",
+            "3Q": "Output for latched 3D",
+            "4D": "Input for 4Q",
+            "4Q": "Output for latched 4D",
+            "5D": "Input for 5Q",
+            "5Q": "Output for latched 5D",
+            "6D": "Input for 6Q",
+            "6Q": "Output for latched 6D",
+            "7D": "Input for 7Q",
+            "7Q": "Output for latched 7D",
+            "8D": "Input for 8Q",
+            "8Q": "Output for latched 8D",
+            OC: "Active LOW output enable",
+            C: "Latches Ds into nQs internal state"
         }
     }
 ));

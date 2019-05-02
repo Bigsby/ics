@@ -21,6 +21,23 @@ ics.push(new IC("74x283", "4bit Full Adder", IC.TYPES.ARITHEMATIC, "http://www.t
             this.Sums = indexes.map(index => this.pin("Σ" + index));
             this.CarryIn = this.pin("CI");
             this.CarryOut = this.pin("CO");
+        },
+        descriptions: {
+            A1: "1st bit (LSBF) of first operand",
+            A2: "2nd bit (LSBF) of first operand",
+            A3: "3rd bit (LSBF) of first operand",
+            A4: "4th bit (LSBF) of first operand",
+            B1: "1st bit (LSBF) of second operand",
+            B2: "2nd bit (LSBF) of second operand",
+            B3: "3rd bit (LSBF) of second operand",
+            B4: "4th bit (LSBF) of second operand",
+            "Σ1": "1st bit of result",
+            "Σ2": "2nd bit of result",
+            "Σ3": "3rd bit of result",
+            "Σ4": "4th bit of result",
+            CI: "Carry in",
+            CO: "Carry out"
+
         }
     }
 ));
