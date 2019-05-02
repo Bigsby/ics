@@ -3,7 +3,7 @@ import { IC } from "./helpers.js";
 const ics = [];
 
 ics.push(new IC("74x373", "8xD-Flip-Flop", IC.TYPES.LATCH, "http://www.ti.com/lit/ds/symlink/sn54ls373.pdf",
-    "-OC/i,1Q/o,1D/i,2D/i,2Q/o,3Q/o,3D/i,4D/i,4Q/o,G,C/i,5Q/o,5D/i,6D/i,6Q/o,7Q/o,7D/i,8D/i,8Q/o,V",
+    "-OC|i,1Q|o,1D|i,2D|i,2Q|o,3Q|o,3D|i,4D|i,4Q|o,G,C|i,5Q|o,5D|i,6D|i,6Q|o,7Q|o,7D|i,8D|i,8Q|o,V",
     function () {
         const enabled = !this.pin("OC").state;
         if (this.pin("C").state) {
@@ -27,7 +27,7 @@ const _62256outputNames = [...Array(8).keys()].map(index => "IO" + index);
 let _62256outputs;
 const _62256addresses = [...Array(15).keys()].map(index => "A" + index);
 // ics.push("62256", "32Kx8 Statis RAM",
-//     "A14/i,A12/i,A7/i,A6/i,A5/i,A4/i,A3/i,A2/i,A1/i,A0/i,IO0/o,IO1/o,IO2/o,G,IO3/o,IO4/o,IO5/o,IO6/o,IO7/o,-CS/i,A10/i,-OE/i,A11/i,A9/i,A8/i,A13/i,-WE/i,V",
+//     "A14|i,A12|i,A7|i,A6|i,A5|i,A4|i,A3|i,A2|i,A1|i,A0|i,I/O0|o,I/O1|o,I/O2|o,G,I/O3|o,I/O4|o,I/O5|o,I/O6|o,I/O7|o,-CS|i,A10|i,-OE|i,A11|i,A9|i,A8|i,A13|i,-WE|i,V",
 //     "http://pdf.datasheetcatalog.com/datasheets/166/177036_DS.pdf",
 //     function(changedPin) {
 //         if (!_62256outputs) {
@@ -51,7 +51,7 @@ const _62256addresses = [...Array(15).keys()].map(index => "A" + index);
 // );
 
 // ics.push(new IC("74x173", "4bit Register 3-State", IC.TYPES.LATCH, "http://www.ti.com/lit/ds/symlink/sn54ls173a.pdf",
-//     "M/i,N/i,1Q/o,2Q/o,3Q/o,4Q/o,C,G,-G1/i,-G2/i,4D/i,3D/i,2D/i,1D/i,CLR/i,V",
+//     "M|i,N|i,1Q|o,2Q|o,3Q|o,4Q|o,C,G,-G1|i,-G2|i,4D|i,3D|i,2D|i,1D|i,CLR|i,V",
 //     function (changedPin) {
 //         if (this.CLR.state) {
 //             this.internalState = [false, false, false, false];

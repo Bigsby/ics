@@ -3,7 +3,7 @@ import { IC, decimalToBinary, binaryToDecimal } from "./helpers.js";
 const ics = [];
 
 ics.push(new IC("74x93", "4bit Binary Counter", IC.TYPES.COUNTER, "http://www.ti.com/lit/ds/symlink/sn74ls93.pdf",
-    "CKB/cf,R0(1)/i,R0(2)/i,N,V,N,N,QC/o,QB/o,G,QD/o,QA/o,N,CKA/cf",
+    "CKB|cf,R0(1)|i,R0(2)|i,N,V,N,N,QC|o,QB|o,G,QD|o,QA|o,N,CKA|cf",
     function (changedPin) {
         if (!changedPin || (this.R1.state && this.R2.state)) {
             this.Bstate = 0;
@@ -33,7 +33,7 @@ ics.push(new IC("74x93", "4bit Binary Counter", IC.TYPES.COUNTER, "http://www.ti
 ));
 
 ics.push(new IC("74x193", "4bit Up/Down Counter", IC.TYPES.COUNTER, "http://www.ti.com/lit/ds/symlink/sn74ls193.pdf",
-    "B/i,QB/o,QA/o,DOWN/cr,UP/cr,QC/o,QD/o,G,D/i,C/i,-LOAD/i,-CO/o,-BO/o,CLR/i,A/i,V",
+    "B|i,QB|o,QA|o,DOWN|cr,UP|cr,QC|o,QD|o,G,D|i,C|i,-LOAD|i,-CO|o,-BO|o,CLR|i,A|i,V",
     function (changedPin) {
         if (!this.Load.state) {
             this.count = binaryToDecimal(...this.inputs);
@@ -80,7 +80,7 @@ ics.push(new IC("74x193", "4bit Up/Down Counter", IC.TYPES.COUNTER, "http://www.
 ));
 
 // ics.push(new IC("74x191", "4bit Up/Down Counter", IC.TYPES.COUNTER, "http://www.ti.com/lit/ds/symlink/sn74ls90.pdf",
-//     "B/i,QB/o,QA/o,-CTEN/i,D|-U/i,QC/o,QD/o,G,D/i,C/i,-LOAD/i,MAX|MIN/o,-RCO/o,CLK/cr,A/i,V",
+//     "B|i,QB|o,QA|o,-CTEN|i,D/-U|i,QC|o,QD|o,G,D|i,C|i,-LOAD|i,MAX/MIN|o,-RCO|o,CLK|cr,A|i,V",
 //     function(changedPin) {},
 //     {
 //         initialize() {
@@ -95,7 +95,7 @@ ics.push(new IC("74x193", "4bit Up/Down Counter", IC.TYPES.COUNTER, "http://www.
 // ));
 
 ics.push(new IC("74x90", "Decade Coutner", IC.TYPES.COUNTER, "http://www.ti.com/lit/ds/symlink/sn74ls90.pdf",
-    "CKB/cf,R0(1)/i,R0(2)/i,N,V,R9(1)/i,R9(2)/i,QC/o,QB/o,G,QD/o,QA/o,N,CKA/cf",
+    "CKB|cf,R0(1)|i,R0(2)|i,N,V,R9(1)|i,R9(2)|i,QC|o,QB|o,G,QD|o,QA|o,N,CKA|cf",
     function (changedPin) {
         const controlState = binaryToDecimal(...this.controlPins);
         if (controlState >= 12) {

@@ -12,7 +12,7 @@ const ics = [];
 //     [ false, false, false, false, false, false, false, false ] // all off - strobe
 // ];
 // ics.push(new IC("74x151", "8>1 Selector",
-//     "D3/o,D2/o,D1/o,D0/o,Y/i,W/i,-G/i,G,C/i,B/i,A/i,D7/o,D6/o,D5/o,D4/o,V",
+//     "D3|o,D2|o,D1|o,D0|o,Y|i,W|i,-G|i,G,C|i,B|i,A|i,D7|o,D6|o,D5|o,D4|o,V",
 //     "http://www.ti.com/lit/ds/symlink/sn74ls151.pdf",
 //     function() {
 //         let decimalValue = 8;

@@ -3,7 +3,7 @@ import { IC, binaryToDecimal, decimalToBinary, notSet } from "./helpers.js";
 const ics = [];
 
 ics.push(new IC("74x283", "4bit Full Adder", IC.TYPES.ARITHEMATIC, "http://www.ti.com/lit/ds/symlink/sn74ls283.pdf",
-    "Σ2/o,B2/i,A2/i,Σ1/o,A1/i,B1/i,CI/i,G,CO/o,Σ4/o,B4/i,A4/i,Σ3/o,A3/i,B3/i,V",
+    "Σ2|o,B2|i,A2|i,Σ1|o,A1|i,B1|i,CI|i,G,CO|o,Σ4|o,B4|i,A4|i,Σ3|o,A3|i,B3|i,V",
     function () {
         const A = binaryToDecimal(...this.As);
         const B = binaryToDecimal(...this.Bs);
@@ -191,7 +191,7 @@ const _74x181functions = {
     },
 };
 // ics.push(new IC("74x181", "4bit ALU", IC.TYPES.ARITHEMATIC, "http://www.ti.com/lit/ds/symlink/sn54ls181.pdf",
-//     "-B0/i,-A0/i,S3/i,S2/i,S1/i,S0/i,Cn/i,M/i,-F0/o,-F1/o,-F2/o,G,-F3/o,A=B/o,-P/o,Cn+4/o,-G/o,-B3/i,-A3/i,-B2/i,-A2/i,-B1/i,-A1/i,V",
+//     "-B0|i,-A0|i,S3|i,S2|i,S1|i,S0|i,Cn|i,M|i,-F0|o,-F1|o,-F2|o,G,-F3|o,A=B|o,-P|o,Cn+4|o,-G|o,-B3|i,-A3|i,-B2|i,-A2|i,-B1|i,-A1|i,V",
 //     function () {
 //         const func = this.getFunction();
 //         func(this.Fs, this.As, this.Bs);

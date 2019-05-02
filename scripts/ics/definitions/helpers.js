@@ -29,6 +29,22 @@ const INPUT_PIN_TYPES = [
     PIN_TYPES.CLOCK_R
 ];
 
+// pin standard shortcut definitions:
+// V = VCC|v
+// G = GND|g
+// N = NC|n
+
+// nomal definition: name|type
+// types:
+// i = input
+// o = outpu
+// io = input and output
+// cr = clock on raising-edge
+// cf = clock on falling-edge
+// g = ground
+// v = Voltage common collector
+// n = not connected
+
 class Pin {
     constructor(number, name, type, inverted, definition) {
         this.number = number;
@@ -58,7 +74,6 @@ function parsePinType(type) {
         case "i": return PIN_TYPES.INPUT;
         case "o": return PIN_TYPES.OUTPUT;
         case "io": return PIN_TYPES.INPUT_OUTPUT;
-        case "c": return PIN_TYPES.CLOCK;
         case "cr": return PIN_TYPES.CLOCK_R;
         case "cf": return PIN_TYPES.CLOCK_F;
         case "g": return PIN_TYPES.GND;
@@ -68,10 +83,9 @@ function parsePinType(type) {
 }
 
 function parsePin(definition, number) {
-    const values = definition.split("/");
+    const values = definition.split("|");
     if (values.length === 1) { // standard pins
         switch (values[0]) {
-            case "C": return new Pin(number, "CLK", PIN_TYPES.CLOCK, false, definition);
             case "N": return new Pin(number, "NC", PIN_TYPES.NC, false, definition);
             case "G": return new Pin(number, "GND", PIN_TYPES.GND, false, definition);
             case "V": return new Pin(number, "VCC", PIN_TYPES.VCC, false, definition);
