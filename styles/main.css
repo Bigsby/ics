@@ -141,6 +141,7 @@ div.pin-number {
     width: 1.75em;
     margin: 2px 0;
     text-align: center;
+    font-size: .6em;
     -webkit-touch-callout: none;
     /* iOS Safari */
     -webkit-user-select: none;
@@ -153,7 +154,7 @@ div.pin-number {
     /* Internet Explorer/Edge */
     user-select: none;
     /* Non-prefixed version, currently
-                                  supported by Chrome and Opera */
+    supported by Chrome and Opera */
 }
 
 div.pin-number.input, div.pin-number.clock, div.pin-number.clock-raising, div.pin-number.clock-falling {
@@ -269,7 +270,7 @@ div.io.right.output {
 
 div.pin .pin-name {
     position: absolute;
-    top: .7em;
+    top: .3em;
     font-size: .6em;
 }
 
@@ -278,9 +279,9 @@ div.pin .pin-name.inverted {
 }
 
 div.pin .pin-name.left {
-    left: 3.5em;
+    left: 2.4em;
 }
 
 div.pin .pin-name.right {
-    right: 3.5em;
+    right: 2.4em;
 }
