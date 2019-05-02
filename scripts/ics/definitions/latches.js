@@ -5,11 +5,10 @@ const ics = [];
 ics.push(new IC("74x373", "8xD-Flip-Flop", IC.TYPES.LATCH, "http://www.ti.com/lit/ds/symlink/sn54ls373.pdf",
     "-OC|i,1Q|o,1D|i,2D|i,2Q|o,3Q|o,3D|i,4D|i,4Q|o,G,C|i,5Q|o,5D|i,6D|i,6Q|o,7Q|o,7D|i,8D|i,8Q|o,V",
     function () {
-        const enabled = !this.pin("OC").state;
-        if (this.pin("C").state) {
+        const enabled = !this.OC.state;
+        if (this.C.state) {
             this.Ds.map((pin, index) => this.internalState[index] = pin.state);
         }
-
         this.setStates(this.Qs, this.internalState.map(value => value && enabled));
     },
     {
@@ -18,6 +17,8 @@ ics.push(new IC("74x373", "8xD-Flip-Flop", IC.TYPES.LATCH, "http://www.ti.com/li
             const indexes = [...Array(8).keys()].map(index => index + 1);
             this.Qs = indexes.map(index => this.pin(index + "Q"));
             this.Ds = indexes.map(index => this.pin(index + "D"));
+            this.C = this.pin("C");
+            this.OC = this.pin("OC");
         },
         descriptions: {
             "1D": "Input for 1Q",
@@ -39,6 +40,28 @@ ics.push(new IC("74x373", "8xD-Flip-Flop", IC.TYPES.LATCH, "http://www.ti.com/li
             OC: "Active LOW output enable",
             C: "Latches Ds into nQs internal state"
         }
+    }
+));
+
+ics.push(new IC("74x374", "8xD-Flip-Flop w Clock", IC.TYPES.LATCH, "http://www.ti.com/lit/ds/symlink/sn54ls374.pdf",
+    "-OC|i,1Q|o,1D|i,2D|i,2Q|o,3Q|o,3D|i,4D|i,4Q|o,G,CLK|cr,5Q|o,5D|i,6D|i,6Q|o,7Q|o,7D|i,8D|i,8Q|o,V",
+    function(changedPin) {
+        const enabled = !this.OC.state;
+        if (changedPin && changedPin.is("CLK") && changedPin.state) {
+            this.Ds.map((pin, index) => this.internalState[index] = pin.state);
+        }
+        this.setStates(this.Qs, this.internalState.map(value => value && enabled));
+    },
+    {
+        initialize() {
+            this.internalState = [false, false, false, false, false, false, false, false];
+            const indexes = [...Array(8).keys()].map(index => index + 1);
+            this.Qs = indexes.map(index => this.pin(index + "Q"));
+            this.Ds = indexes.map(index => this.pin(index + "D"));
+            this.CLK = this.pin("CLK");
+            this.OC = this.pin("OC");
+        },
+        descriptions: {}
     }
 ));
 

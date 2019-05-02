@@ -74,7 +74,7 @@ new Vue({
     watch: {
         search: function (newValue) {
             if (newValue) {
-                const regEx = new RegExp(newValue, "i");
+                const regEx = new RegExp(newValue.trim(), "i");
                 this.ics = this.completeList.filter(ic => regEx.test(ic.id) || regEx.test(ic.name));
             } else {
                 this.ics = this.completeList;
