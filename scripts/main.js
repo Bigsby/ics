@@ -86,6 +86,7 @@ new Vue({
         this.ics = this.completeList;
     },
     mounted() {
+        this.search = window.location.hash ? window.location.hash.substr(1) : "";
         this.$refs.search.focus();
     }
 });
