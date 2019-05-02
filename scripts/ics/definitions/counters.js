@@ -105,20 +105,54 @@ ics.push(new IC("74x193", "4bit Up/Down Counter", IC.TYPES.COUNTER, "http://www.
     }
 ));
 
-// ics.push(new IC("74x191", "4bit Up/Down Counter", IC.TYPES.COUNTER, "http://www.ti.com/lit/ds/symlink/sn74ls90.pdf",
-//     "B|i,QB|o,QA|o,-CTEN|i,D/-U|i,QC|o,QD|o,G,D|i,C|i,-LOAD|i,MAX/MIN|o,-RCO|o,CLK|cr,A|i,V",
-//     function(changedPin) {},
-//     {
-//         initialize() {
-//             const names = ["A", "B", "C", "D"];
-//             this.inputs = names.map(name => this.pin(name));
-//             this.outputs = names.map(name => this.pin("Q" + name));
-//             this.Load = this.pin("LOAD");
-//             this.DownUp = this.pin("D|-U");
-//             this.CountEnable = this.pin("CTEN");
-//         }
-//     }
-// ));
+ics.push(new IC("74x191", "4bit Up/Down Counter", IC.TYPES.COUNTER, "http://www.ti.com/lit/ds/symlink/sn74ls90.pdf",
+    "B|i,QB|o,QA|o,-CTEN|i,D/!U|i,QC|o,QD|o,G,D|i,C|i,-LOAD|i,MAX/MIN|o,-RCO|i,CLK|cr,A|i,V",
+    function(changedPin) {
+        if (!this.RCO.state) {
+            this.currentCount = 0;
+        } else if (!this.Load.state) {
+            this.currentCount = binaryToDecimal(...this.inputs);
+        } else if (!this.CTEN.state && changedPin.is("CLK") && changedPin.state) {
+            if (this.DU.state) {
+                this.currentCount = this.currentCount === 0 ? 15 : this.currentCount - 1;
+                this.MAXMIN.state = this.currentCount === 0;
+            } else {
+                this.currentCount = this.currentCount === 15 ? 0 : this.currentCount + 1;
+                this.MAXMIN.state = this.currentCount === 15;
+            }
+        }
+        this.setStates(this.outputs, decimalToBinary(this.currentCount, 4, true));
+    },
+    {
+        initialize() {
+            const names = ["A", "B", "C", "D"];
+            this.inputs = names.map(name => this.pin(name));
+            this.outputs = names.map(name => this.pin("Q" + name));
+            this.Load = this.pin("LOAD");
+            this.DU = this.pin("D/!U");
+            this.CTEN = this.pin("CTEN");
+            this.CLK = this.pin("CLK");
+            this.RCO = this.pin("RCO")
+            this.currentCount = 0;
+            this.MAXMIN = this.pin("MAX/MIN");
+        },
+        descriptions: {
+            A: "1st bit (LSBF) of input",
+            B: "2nd bit (LSBF) of input",
+            C: "3rd bit (LSBF) of input",
+            D: "4th bit (LSBF) of input",
+            QA: "1st bit (LSBF) of output",
+            QB: "2nd bit (LSBF) of output",
+            QC: "3rd bit (LSBF) of output",
+            QD: "4th bit (LSBF) of output",
+            LOAD: "Active LOW load input into output",
+            CTEN: "Active LOW Counter Active",
+            "MAX/MIN": "HIGH when 15 is in output going up and when 0 is in output when going down.",
+            CLK: "Raising edge clock",
+            "D/!U": "Count direction control. HIGH is down, LOW is up."
+        }
+    }
+));
 
 ics.push(new IC("74x90", "Decade Coutner", IC.TYPES.COUNTER, "http://www.ti.com/lit/ds/symlink/sn74ls90.pdf",
     "CKB|cf,R0(1)|i,R0(2)|i,N,V,R9(1)|i,R9(2)|i,QC|o,QB|o,G,QD|o,QA|o,N,CKA|cf",
