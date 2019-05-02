@@ -111,6 +111,19 @@ div.ic-box {
     display: flex;
     justify-content: space-around;
     width: 5em;
+    position: relative;
+}
+
+div.ic-box .half-moon {
+    position: absolute;
+    top: 0;
+    background: gray;
+    display: inline-block;
+    margin: 0 1em 1em 0;
+    height: .5em;
+    width: 1em;
+    border-bottom-left-radius: 1em;
+    border-bottom-right-radius: 1em;
 }
 
 div.pin-strip {
