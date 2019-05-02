@@ -256,7 +256,8 @@ div.io.right.output {
 
 div.pin .pin-name {
     position: absolute;
-    top: .1em;
+    top: .7em;
+    font-size: .6em;
 }
 
 div.pin .pin-name.inverted {
@@ -264,9 +265,9 @@ div.pin .pin-name.inverted {
 }
 
 div.pin .pin-name.left {
-    left: 2.2em;
+    left: 3.5em;
 }
 
 div.pin .pin-name.right {
-    right: 2.2em;
+    right: 3.5em;
 }
