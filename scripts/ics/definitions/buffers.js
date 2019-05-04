@@ -73,7 +73,7 @@ ics.push(new IC("74x245", "8x Bus Transceiver", IC.TYPES.BUFFER, "http://www.ti.
                 }
             }
             const inputs = this.DIR.state ? this.As : this.Bs;
-            const outputs = this.DIR.state ? this.Bs : this.As ;
+            const outputs = this.DIR.state ? this.Bs : this.As;
             outputs.forEach((outputPin, index) => outputPin.state = inputs[index].state && !this.OE.state);
         } else {
             this.As.forEach(pin => pin.state = false);
@@ -110,5 +110,26 @@ ics.push(new IC("74x245", "8x Bus Transceiver", IC.TYPES.BUFFER, "http://www.ti.
         }
     }
 ));
+
+// ics.push(new IC("74x595", "8bit Shift Register", IC.TYPES.BUFFER, "http://www.ti.com/lit/ds/symlink/sn54ls595.pdf",
+//     "QB|o,QC|o,QD|o,QE|o,QF|o,QG|o,QH|o,G,QH'|o,-SRCLR|i,SRCK|i,RCK|i,-G|i,SER|i,QA|o,V",
+//     function (changedPin) {
+
+//     },
+//     {
+//         initialize() {
+//             this.Qs = [ "A", "B", "C", "D", "E", "F", "G", "H"].map(index => this.pin("Q" + index));
+//             this.QH = this.pin("QH'");
+//             this.SRCLR = this.pin("SRCLR");
+//             this.SRCK = this.pin("SRCK");
+//             this.RCK = this.pin("RCK");
+//             this.G = this.pin("G");
+//             this.SER = this.pin("SER");
+//         },
+//         descriptions: {
+
+//         }
+//     }
+// ));
 
 export default ics;
