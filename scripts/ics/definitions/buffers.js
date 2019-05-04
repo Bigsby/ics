@@ -1,4 +1,4 @@
-import { IC } from "./helpers.js";
+import { IC, PIN_TYPES } from "./helpers.js";
 
 const ics = [];
 
@@ -55,6 +55,58 @@ ics.push(new IC("74x541", "8x Buffer 3-State", IC.TYPES.BUFFER, "http://www.ti.c
             Y8: "Equal to A8 when G1 NOR G2",
             G1: "NOR G2 strobe for Ys",
             G2: "NOR G1 strobe for Ys",
+        }
+    }
+));
+
+ics.push(new IC("74x245", "8x Bus Transceiver", IC.TYPES.BUFFER, "http://www.ti.com/lit/ds/symlink/sn54ls245-sp.pdf",
+    "DIR|i,A1|o,A2|o,A3|o,A4|o,A5|o,A6|o,A7|o,A8|o,G,B8|i,B7|i,B6|i,B5|i,B4|i,B3|i,B2|i,B1|i,-OE|i,V",
+    function (changedPin) {
+        if (changedPin) {
+            if (changedPin.is("DIR")) {
+                if (changedPin.state) {
+                    this.As.forEach(pin => pin.type = PIN_TYPES.INPUT);
+                    this.Bs.forEach(pin => pin.type = PIN_TYPES.OUTPUT);
+                } else {
+                    this.As.forEach(pin => pin.type = PIN_TYPES.OUTPUT);
+                    this.Bs.forEach(pin => pin.type = PIN_TYPES.INPUT);
+                }
+            }
+            const inputs = this.DIR.state ? this.As : this.Bs;
+            const outputs = this.DIR.state ? this.Bs : this.As ;
+            outputs.forEach((outputPin, index) => outputPin.state = inputs[index].state && !this.OE.state);
+        } else {
+            this.As.forEach(pin => pin.state = false);
+            this.Bs.forEach(pin => pin.state = false);
+        }
+    },
+    {
+        initialize() {
+            const indexes = [...Array(8).keys()].map(index => index + 1);
+            this.As = indexes.map(index => this.pin("A" + index));
+            this.Bs = indexes.map(index => this.pin("B" + index));
+            this.DIR = this.pin("DIR");
+            this.OE = this.pin("OE");
+        },
+        descriptions: {
+            A1: "Input or output for B1",
+            A2: "Input or output for B2",
+            A3: "Input or output for B3",
+            A4: "Input or output for B4",
+            A5: "Input or output for B5",
+            A6: "Input or output for B6",
+            A7: "Input or output for B7",
+            A8: "Input or output for B8",
+            B1: "Input or output for A1",
+            B2: "Input or output for A2",
+            B3: "Input or output for A3",
+            B4: "Input or output for A4",
+            B5: "Input or output for A5",
+            B6: "Input or output for A6",
+            B7: "Input or output for A7",
+            B8: "Input or output for A8",
+            DIR: "Input/Output direction: LOW = B to A; HIGH = A to B",
+            OE: "Active LOW Output enabled"
         }
     }
 ));
