@@ -1,27 +1,46 @@
+import { IC, binaryToDecimal } from "./helpers.js";
+
 const ics = [];
 
-// const _74x151Ydata = [
-//     [ true, false, false, false, false, false, false, false ], // 0
-//     [ false, true, false, false, false, false, false, false ], // 1
-//     [ false, false, true, false, false, false, false, false ], // 2
-//     [ false, false, false, true, false, false, false, false ], // 3
-//     [ false, false, false, false, true, false, false, false ], // 4
-//     [ false, false, false, false, false, true, false, false ], // 5
-//     [ false, false, false, false, false, false, true, false ], // 6
-//     [ false, false, false, false, false, false, false, true ], // 7
-//     [ false, false, false, false, false, false, false, false ] // all off - strobe
-// ];
-// ics.push(new IC("74x151", "8>1 Selector",
-//     "D3|o,D2|o,D1|o,D0|o,Y|i,W|i,-G|i,G,C|i,B|i,A|i,D7|o,D6|o,D5|o,D4|o,V",
-//     "http://www.ti.com/lit/ds/symlink/sn74ls151.pdf",
-//     function() {
-//         let decimalValue = 8;
-//         if (!this.pin("G").state) {
-//             decimalValue = binaryToDecimal(this.pin("A"), this.pin("B"), this.pin("C"));
-//         }
+ics.push(new IC("74x151", "8 > 1 Selector", IC.TYPES.SELECTOR, "http://www.ti.com/lit/ds/sdls054/sdls054.pdf",
+    "D3|i,D2|i,D1|i,D0|i,Y|o,W|o,-G|i,G,C|i,B|i,A|i,D7|i,D6|i,D5|i,D4|i,V",
+    function (changedPin) {
+        let value = false;
+        if (!this.G.state) {
+            const selected = binaryToDecimal(...this.inputs);
+            value = this.pin("D" + selected).state;
+        }
 
+        this.Y.state = value;
+        this.W.state = !value;
+    },
+    {
+        initialize() {
+            for (let index = 0; index < 8; index++) {
+                this["D" + index] = this.pin("D" + index);
+            }
 
-//     }
-// ));
+            this.inputs = ["A", "B", "C"].map(name => this.pin(name));
+            this.G = this.pin("G");
+            this.W = this.pin("W");
+            this.Y = this.pin("Y");
+        },
+        descriptions: {
+            Y: "Value of seleced Dn",
+            W: "Inverse of seleced Dn",
+            A: "1st bit (LSBF) of input",
+            B: "2nd bit (LSBF) of input",
+            C: "3rd bit (LSBF) of input",
+            D0: "Input when ABC = 0",
+            D1: "Input when ABC = 1",
+            D2: "Input when ABC = 2",
+            D3: "Input when ABC = 3",
+            D4: "Input when ABC = 4",
+            D5: "Input when ABC = 5",
+            D6: "Input when ABC = 6",
+            D7: "Input when ABC = 7"
+        }
+    }
+));
 
 export default ics;
